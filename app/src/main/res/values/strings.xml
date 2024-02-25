@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Ktor</string>
+    <string name="leading_icon">leading icon</string>
+    <string name="trailing_icon">trailing icon</string>
+    <string name="add_admin">add admin</string>
+    <string name="add_icon">add icon</string>
+    <string name="save_button">save button</string>
+    <string name="back_button">back button</string>
+    <string name="remove_answer">remove answer</string>
+    <string name="student_image">student image</string>
+    <string name="camera">camera</string>
+    <string name="back">back</string>
+</resources>

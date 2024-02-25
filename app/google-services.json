@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "327642451933",
+    "project_id": "quiz-app-13217",
+    "storage_bucket": "quiz-app-13217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327642451933:android:cf6d4a97a413fa57bb3034",
+        "android_client_info": {
+          "package_name": "com.engineerfred.kotlin.ktor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB7WoJo9PzGG2JE1Jv6ULYje3s2i5nHnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
