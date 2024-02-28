@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.theme.GainsboroWhite
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +86,7 @@ fun ChoiceCard(
 @Preview( showBackground = true )
 @Composable
 fun ChoiceCardPreview() {
-    KtorTheme {
+    QuizAppTheme {
         ChoiceCard(
             answerChoice = "1983",
             selected = false,

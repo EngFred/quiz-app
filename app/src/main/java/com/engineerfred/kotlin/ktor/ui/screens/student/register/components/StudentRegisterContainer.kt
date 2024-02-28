@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.engineerfred.kotlin.ktor.common.CustomButtonComponent
 import com.engineerfred.kotlin.ktor.common.CustomTextEntry
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun StudentRegisterContainer(
@@ -102,7 +102,7 @@ fun StudentRegisterContainer(
 @Preview( showBackground = true )
 @Composable
 fun StudentRegisterContainerPreview() {
-    KtorTheme {
+    QuizAppTheme {
         StudentRegisterContainer(
             phoneNumberValue = {""},
             phoneNumberValueError = "",

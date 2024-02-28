@@ -36,9 +36,9 @@ fun StudentsHomeScreen(
     navController: NavHostController = rememberNavController(),
     sharedViewModel: SharedViewModel
 ) {
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
 
     val student = sharedViewModel.student
 

@@ -9,17 +9,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.engineerfred.kotlin.ktor.ui.theme.CoralRed
 import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,13 +26,12 @@ fun QuestionCard(
     questionText: String
 ) {
 
-    val backGround =  if ( isSystemInDarkTheme() ) DarkSlateGrey else CoralRed
+    val backGround =  if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary.copy(alpha = .6f)
     ElevatedCard(
         onClick = { /*TODO*/ },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp, vertical = 30.dp)
-            .shadow(10.dp),
+            .padding(horizontal = 15.dp, vertical = 30.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = backGround
@@ -53,7 +51,11 @@ fun QuestionCard(
 @Preview( showBackground = true )
 @Composable
 fun QuestionCardPreview() {
-    KtorTheme {
-        QuestionCard(questionText = "In what year did the United States host the FIFA World Cup For The Fist time?")
+    QuizAppTheme {
+        QuestionCard(questionText = "In what year" +
+                " did the United States host " +
+                "the FIFA World Cup For " +
+                "The Fist time?"
+        )
     }
 }

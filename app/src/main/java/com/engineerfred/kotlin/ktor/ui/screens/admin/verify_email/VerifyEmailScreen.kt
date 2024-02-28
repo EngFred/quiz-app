@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomButtonComponent
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun VerifyEmailScreen(
@@ -68,7 +68,7 @@ fun VerifyEmailScreen(
 @Preview( showBackground = true )
 @Composable
 fun VerifyEmailScreenPreview() {
-    KtorTheme {
+    QuizAppTheme {
         VerifyEmailScreen(
             email = "omongolealfred4@gmail.com"
         ) {}

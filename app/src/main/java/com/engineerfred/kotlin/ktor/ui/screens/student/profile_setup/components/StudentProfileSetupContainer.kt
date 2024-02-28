@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomTextEntry
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,7 +121,7 @@ fun StudentProfileSetupContainer(
 @Preview( showBackground = true )
 @Composable
 fun StudentRegisterContainerPreview() {
-    KtorTheme {
+    QuizAppTheme {
         StudentProfileSetupContainer(
             onNameChanged = {},
             nameTextValue = { "" },

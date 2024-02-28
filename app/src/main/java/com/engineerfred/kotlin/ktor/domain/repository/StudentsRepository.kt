@@ -14,9 +14,8 @@ interface StudentsRepository {
     suspend fun deleteStudent( studentId: String ) : Response<Any>
     fun getAllStudents() : Flow<Response<List<Student>>>
     suspend fun updateStudent( student: Student, context: Context ) : Response<Any>
-
+    suspend fun upgradeStudentLevel( studentId: String, newLevel: String, subject: String ) : Response<Any>
     suspend fun logoutStudent() : Response<Any>
-
     suspend fun addStudent(student: Student, context: Context) : Response<Any>
     fun checkIfStudentExistsInDatabase( studentId: String ) : Flow<Response<Student?>> //at the same time getting the student
 

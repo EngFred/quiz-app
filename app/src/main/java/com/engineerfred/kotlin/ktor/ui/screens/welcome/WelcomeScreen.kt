@@ -1,6 +1,5 @@
 package com.engineerfred.kotlin.ktor.ui.screens.welcome
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
@@ -69,9 +66,6 @@ fun WelcomeScreen(
                         fontSize = 19.sp,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background( Brush.linearGradient(
-                                listOf( MaterialTheme.colorScheme.primary, Color.White )
-                            ) )
                             .align( Alignment.TopStart )
                             .padding( horizontal = 28.dp , vertical = 10.dp),
                     )

@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.engineerfred.kotlin.ktor.ui.model.User
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +113,7 @@ fun CardRow(
 @Preview( showBackground = true )
 @Composable
 fun Prev1() {
-    KtorTheme {
+    QuizAppTheme {
        CardRow(
            card1Text = User.Student.name,
            card2Text = User.Admin.name,

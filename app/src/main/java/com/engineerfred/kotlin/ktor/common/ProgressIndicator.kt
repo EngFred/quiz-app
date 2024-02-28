@@ -23,11 +23,12 @@ import com.engineerfred.kotlin.ktor.R
 
 @Composable
 fun ProgressIndicator(
+    modifier: Modifier = Modifier,
     text: String,
     color: Color = if ( !isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else Color.White
 ) {
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(vertical = 35.dp),
         verticalArrangement = Arrangement.Center,

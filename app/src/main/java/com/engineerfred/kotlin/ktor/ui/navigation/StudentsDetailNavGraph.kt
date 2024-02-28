@@ -26,7 +26,10 @@ fun NavGraphBuilder.studentsDetailNavGraph( navController: NavController ) {
 
             QuizQuestionsScreen(
                 studentLevel = studentLevel,
-                subject = subject
+                subject = subject,
+                onBackClicked = {
+                    navController.navigateUp()
+                }
             )
 
         }

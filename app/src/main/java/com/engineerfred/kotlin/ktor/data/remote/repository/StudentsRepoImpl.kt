@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.engineerfred.kotlin.ktor.domain.model.Student
 import com.engineerfred.kotlin.ktor.domain.repository.StudentsRepository
+import com.engineerfred.kotlin.ktor.ui.model.Subject
 import com.engineerfred.kotlin.ktor.util.Constants.STUDENTS_COLLECTION
 import com.engineerfred.kotlin.ktor.util.Constants.STUDENTS_PROFILE_IMAGES_FOLDER
 import com.engineerfred.kotlin.ktor.util.Response
@@ -250,6 +251,27 @@ class StudentsRepoImpl @Inject constructor(
         } catch ( ex: Exception ) {
             if ( ex is CancellationException ) throw  ex
             Log.i(TAG, "Error adding student in the database! $ex")
+            Response.Error("$ex")
+        }
+    }
+
+    override suspend fun upgradeStudentLevel(studentId: String, newLevel: String, subject: String): Response<Any> {
+        return try {
+
+            withContext(NonCancellable) {
+                val map = when (subject) {
+                    Subject.English.name -> mapOf("englishLevel" to newLevel )
+                    Subject.Mathematics.name -> mapOf("mathLevel" to newLevel )
+                    else -> mapOf("englishLevel" to newLevel)
+                }
+
+                val task = db.collection( STUDENTS_COLLECTION ).document(studentId).update( map ).await()
+                Response.Success(task)
+            }
+
+        }catch ( ex: Exception ) {
+            if ( ex is CancellationException ) throw  ex
+            Log.i(TAG, "Error upgrading student level! $ex")
             Response.Error("$ex")
         }
     }

@@ -17,7 +17,7 @@ import coil.request.CachePolicy
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -66,7 +66,7 @@ fun DisplayImage(
 @Preview( showBackground = true )
 @Composable
 fun DisplayImagePreview() {
-    KtorTheme {
+    QuizAppTheme {
         DisplayImage(imageUrl = "")
     }
 }

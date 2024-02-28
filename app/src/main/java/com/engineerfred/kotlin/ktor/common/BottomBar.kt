@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.model.BottomBarItem
 import com.engineerfred.kotlin.ktor.ui.navigation.Routes
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun BottomBar(
@@ -68,7 +68,7 @@ fun BottomBar(
 @Preview( showBackground = true )
 @Composable
 fun BottomBarPreview() {
-    KtorTheme {
+    QuizAppTheme {
         BottomBar(items = listOf(
             BottomBarItem(
                 label = "Home",

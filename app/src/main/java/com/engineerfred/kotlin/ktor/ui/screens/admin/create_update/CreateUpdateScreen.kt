@@ -253,7 +253,7 @@ fun CreateUpdateScreen(
 
                     //for saving in progress
                     if ( screenState.addingQuestionInProgress ) {
-                        ProgressIndicator(if ( !screenState.isEditMode ) "Saving question..." else "Updating question...")
+                        ProgressIndicator(text = if ( !screenState.isEditMode ) "Saving question..." else "Updating question...")
                     }
 
                     //for error message

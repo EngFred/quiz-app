@@ -1,6 +1,5 @@
 package com.engineerfred.kotlin.ktor.ui.screens.student.questions.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -20,16 +19,18 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.theme.DarkRed
 import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 import kotlinx.coroutines.delay
 
 @Composable
 fun CountdownTimer(
     modifier: Modifier = Modifier,
-    time: Int = 60
+    time: Int,
+    onTimeUp: () -> Unit
 ) {
     var timeLeft by rememberSaveable {
         mutableIntStateOf(time)
@@ -42,6 +43,8 @@ fun CountdownTimer(
         }
     }
 
+    if( timeLeft == 0 ) onTimeUp.invoke()
+
     val borderColor = if ( !isSystemInDarkTheme() ) {
         if ( timeLeft < 15 ) DarkRed else MaterialTheme.colorScheme.primary
     } else if ( timeLeft < 15 ) DarkRed else DarkSlateGrey
@@ -49,18 +52,19 @@ fun CountdownTimer(
     Box(
         modifier = modifier
             .size(40.dp)
-            .border(2.dp, borderColor, CircleShape)
+            //.border(2.dp, borderColor, CircleShape)
             .clip(CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "$timeLeft", fontFamily = Font(R.font.lexend_medium).toFontFamily())
+        //CircularProgressIndicator( progress = (timeLeft / time).toFloat() )
+        Text(text = "$timeLeft", fontFamily = Font(R.font.lexend_medium).toFontFamily(), fontSize = 14.sp)
     }
 }
 
 @Preview( showBackground = true )
 @Composable
 fun CountDownTimerPreview() {
-    KtorTheme {
-        CountdownTimer()
+    QuizAppTheme {
+        CountdownTimer(onTimeUp = {}, time = 40)
     }
 }

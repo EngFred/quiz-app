@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun QuestionTextEntry(
@@ -125,7 +125,7 @@ fun QuestionTextEntry(
 @Preview( showBackground = true )
 @Composable
 fun QuestionTextEntryPreview() {
-    KtorTheme {
+    QuizAppTheme {
         QuestionTextEntry(
             textValue = { "" },
             placeholder = "Enter here the question",

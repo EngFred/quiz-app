@@ -10,7 +10,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun HeaderBackground(
@@ -36,7 +36,7 @@ fun HeaderBackground(
 @Preview( showBackground = true )
 @Composable
 fun HeaderBackGroundPreview() {
-    KtorTheme {
+    QuizAppTheme {
         HeaderBackground(
             leftColor = MaterialTheme.colorScheme.primary,
             rightColor = MaterialTheme.colorScheme.onPrimary,

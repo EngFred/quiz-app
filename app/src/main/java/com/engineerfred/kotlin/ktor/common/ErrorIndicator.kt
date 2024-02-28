@@ -23,10 +23,11 @@ import com.engineerfred.kotlin.ktor.R
 
 @Composable
 fun ErrorIndicator(
+    modifier: Modifier = Modifier,
     errorText: String
 ) {
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(vertical = 20.dp, horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun CustomTextEntry(
@@ -209,7 +209,7 @@ fun CustomTextEntry(
 @Preview( showBackground = true )
 @Composable
 fun CustomTextEntryPreview() {
-    KtorTheme {
+    QuizAppTheme {
         CustomTextEntry(
             hint = "Email",
             textValue = "fred@gmail.com",

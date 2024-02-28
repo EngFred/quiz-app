@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun CustomButtonComponent(
@@ -72,7 +72,7 @@ fun CustomButtonComponent(
 @Preview( showBackground = true )
 @Composable
 fun CustomButtonComponentPreview() {
-    KtorTheme {
+    QuizAppTheme {
         CustomButtonComponent(
             text = "Login",
             backGroundColor = MaterialTheme.colorScheme.primary,

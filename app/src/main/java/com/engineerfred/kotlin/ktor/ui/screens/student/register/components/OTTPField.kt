@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.engineerfred.kotlin.ktor.ui.theme.KtorTheme
+import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
 fun OtpTextField(
@@ -93,7 +93,7 @@ private fun CharView(
 @Preview( showBackground = true )
 @Composable
 fun OTTPFieldPreview() {
-    KtorTheme {
+    QuizAppTheme {
         OtpTextField(otpText = "", onOtpTextChange = { s, b -> } )
     }
 }
