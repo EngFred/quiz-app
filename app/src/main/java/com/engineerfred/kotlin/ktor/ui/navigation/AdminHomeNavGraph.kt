@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.engineerfred.kotlin.ktor.ui.screens.admin.dashbord.AdminDashboardScreen
-import com.engineerfred.kotlin.ktor.ui.screens.admin.feedback_review.FeedbackScreen
+import com.engineerfred.kotlin.ktor.ui.screens.admin.admins.AdminsScreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 
 @Composable
@@ -41,7 +41,7 @@ fun AdminHomeNavigationGraph(
         composable(
             route = Routes.AdminsFeedbackScreen.destination
         ) {
-            FeedbackScreen()
+            AdminsScreen()
         }
 
         adminDetailNavGraph( navController )

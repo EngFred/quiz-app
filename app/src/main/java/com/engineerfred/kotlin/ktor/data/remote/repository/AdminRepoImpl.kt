@@ -60,7 +60,7 @@ class AdminRepoImpl @Inject constructor (
                 val admin = checkIfAdminExistsInDatabase( user.uid )
                 return when ( admin ) {
                     is Response.Error -> {
-                        Response.Error(admin.message)
+                        Response.Error(admin.errorMessage)
                     }
                     is Response.Success -> {
                         if ( admin.data != null ) Response.Success(admin.data) else Response.Success(null )

@@ -12,6 +12,7 @@ import com.engineerfred.kotlin.ktor.util.Response
 import com.engineerfred.kotlin.ktor.util.compressImage
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
@@ -106,7 +107,7 @@ class StudentsRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun signInStudentWithAuthCredentials( credential: PhoneAuthCredential ): Response<Any> {
+    override suspend fun signInStudentWithAuthCredentials( credential: PhoneAuthCredential ): Response<AuthResult>{
         return try {
             val task = auth.signInWithCredential(credential).await()
             Response.Success(task)

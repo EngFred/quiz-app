@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.engineerfred.kotlin.ktor.domain.usecase.preferences.StoreAppUserUseCase
+import com.engineerfred.kotlin.ktor.domain.usecase.student.GetCurrentlyLoggedStudentUseCase
 import com.engineerfred.kotlin.ktor.domain.usecase.student.SignInStudentWithAuthCredentialsUseCase
 import com.engineerfred.kotlin.ktor.domain.usecase.student.VerifyPhoneNumberUseCase
 import com.engineerfred.kotlin.ktor.ui.model.PhoneNumberInputValidationType
@@ -19,6 +20,7 @@ import com.engineerfred.kotlin.ktor.util.Response
 import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +30,7 @@ class StudentRegisterScreenViewModel @Inject constructor(
     private val verifyPhoneNumberUseCase: VerifyPhoneNumberUseCase,
     private val signInStudentWithAuthCredentialsUseCase: SignInStudentWithAuthCredentialsUseCase,
     private val storeAppUserUseCase: StoreAppUserUseCase,
+    private val getCurrentlyLoggedInStudentUseCase: GetCurrentlyLoggedStudentUseCase
     //private val activityRef: WeakReference<Activity>,
 ) : ViewModel() {
 
@@ -103,26 +106,22 @@ class StudentRegisterScreenViewModel @Inject constructor(
     private fun signInStudentWithAuthCredentials() {
         uiState.verificationId?.let {
             viewModelScope.launch( Dispatchers.IO ) {
-                val credential = PhoneAuthProvider.getCredential(
-                    it,
-                    uiState.verificationCode
-                )
+                val credential = PhoneAuthProvider.getCredential( it, uiState.verificationCode )
                 val task = signInStudentWithAuthCredentialsUseCase.invoke( credential )
                 when ( task ) {
                     is Response.Error -> {
                         uiState = uiState.copy(
-                            registrationError = task.message,
+                            registrationError = task.errorMessage,
                             finishingInProgress = false
                         )
                     }
                     is Response.Success -> {
                         uiState = uiState.copy(
-                            phoneNumber = "",
-                            verificationCode = "",
                             changingUser = true,
                             enableVerifyButton = false,
-                            isAuthenticationSuccessful = true
                         )
+                        val studentId = task.data.user!!.uid
+                        getCurrentlyLoggedInStudent(studentId)
                     }
                     Response.Undefined -> Unit
                 }
@@ -136,7 +135,7 @@ class StudentRegisterScreenViewModel @Inject constructor(
             when (task) {
                 is Response.Error -> {
                     uiState = uiState.copy(
-                        registrationError = task.message,
+                        registrationError = task.errorMessage,
                         verificationInProgress = false
                     )
                 }
@@ -185,6 +184,32 @@ class StudentRegisterScreenViewModel @Inject constructor(
                     phoneNumberError = "",
                     enableVerifyButton = true
                 )
+            }
+        }
+    }
+
+    private fun getCurrentlyLoggedInStudent( studentId: String ) = viewModelScope.launch {
+        getCurrentlyLoggedInStudentUseCase.invoke( studentId ).collectLatest { response ->
+            when( response ) {
+                is Response.Error -> {
+                    uiState = uiState.copy(
+                        changingUser = false,
+                        finishingInProgress = false,
+                        registrationError = response.errorMessage
+                    )
+                }
+                Response.Undefined -> Unit
+                is Response.Success -> {
+                    if ( response.data == null ) {
+                        uiState = uiState.copy(
+                            isAuthenticationSuccessfulNewStudent = true
+                        )
+                    } else {
+                        uiState = uiState.copy(
+                            oldStudent = response.data
+                        )
+                    }
+                }
             }
         }
     }

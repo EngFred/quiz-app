@@ -100,7 +100,7 @@ class StudentProfileSetupScreenViewModel @Inject constructor(
                         is Response.Error -> {
                             uiState = uiState.copy(
                                 registrationInProgress = false,
-                                registrationError = response.message
+                                registrationError = response.errorMessage
                             )
                         }
                         is Response.Success -> {
@@ -122,7 +122,7 @@ class StudentProfileSetupScreenViewModel @Inject constructor(
                                     is Response.Error -> {
                                         uiState = uiState.copy(
                                             registrationInProgress = false,
-                                            registrationError = task.message
+                                            registrationError = task.errorMessage
                                         )
                                     }
                                     is Response.Success -> {

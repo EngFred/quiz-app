@@ -249,9 +249,9 @@ class QuizQuestionsViewModel @Inject constructor(
                             is Response.Error -> {
                                 uiState = uiState.copy(
                                     isLoading = false,
-                                    serverError = response.message
+                                    serverError = response.errorMessage
                                 )
-                                Log.v(TAG, "Error: ${response.message}!")
+                                Log.v(TAG, "Error: ${response.errorMessage}!")
                             }
                             is Response.Success -> {
                                 uiState = uiState.copy(
@@ -277,9 +277,9 @@ class QuizQuestionsViewModel @Inject constructor(
                             is Response.Error -> {
                                 uiState = uiState.copy(
                                     isLoading = false,
-                                    serverError = response.message
+                                    serverError = response.errorMessage
                                 )
-                                Log.v(TAG, "Error: ${response.message}!")
+                                Log.v(TAG, "Error: ${response.errorMessage}!")
                             }
                             is Response.Success -> {
                                 uiState = uiState.copy(
@@ -312,9 +312,9 @@ class QuizQuestionsViewModel @Inject constructor(
                                     is Response.Error -> {
                                         uiState = uiState.copy(
                                             isLoading = false,
-                                            serverError = response.message
+                                            serverError = response.errorMessage
                                         )
-                                        Log.v(TAG, "Error: ${response.message}!")
+                                        Log.v(TAG, "Error: ${response.errorMessage}!")
                                     }
                                     is Response.Success -> {
                                         uiState = uiState.copy(
@@ -345,9 +345,9 @@ class QuizQuestionsViewModel @Inject constructor(
                                     is Response.Error -> {
                                         uiState = uiState.copy(
                                             isLoading = false,
-                                            serverError = response.message
+                                            serverError = response.errorMessage
                                         )
-                                        Log.v(TAG, "Error: ${response.message}!")
+                                        Log.v(TAG, "Error: ${response.errorMessage}!")
                                     }
                                     is Response.Success -> {
                                         uiState = uiState.copy(
@@ -384,7 +384,7 @@ class QuizQuestionsViewModel @Inject constructor(
                         uiState = uiState.copy(
                             upgradingLevel = false,
                             enableContinueToNextLevelButton = false,
-                            upgradingLevelError = task.message
+                            upgradingLevelError = task.errorMessage
                         )
                     }
                     is Response.Success -> {

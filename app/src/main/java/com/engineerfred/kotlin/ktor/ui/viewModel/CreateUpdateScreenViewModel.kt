@@ -63,7 +63,7 @@ class CreateUpdateScreenViewModel @Inject constructor(
                 when( response ) {
                     is Response.Error -> {
                         uiState = uiState.copy(
-                            remoteErrorMessage = response.message,
+                            remoteErrorMessage = response.errorMessage,
                             isLoading = false
                         )
                     }
@@ -213,7 +213,7 @@ class CreateUpdateScreenViewModel @Inject constructor(
             when (task) {
                 is Response.Error -> {
                     uiState = uiState.copy(
-                        localErrorMessage = task.message,
+                        localErrorMessage = task.errorMessage,
                         addingQuestionInProgress = false
                     )
                 }

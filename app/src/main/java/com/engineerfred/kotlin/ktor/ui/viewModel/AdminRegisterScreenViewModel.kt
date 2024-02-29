@@ -220,7 +220,7 @@ class AdminRegisterScreenViewModel @Inject constructor(
             when( status ) {
                 is Response.Error -> {
                     _uiState.value = _uiState.value.copy(
-                        registrationError = status.message,
+                        registrationError = status.errorMessage,
                         registrationInProgress = false
                     )
                 }

@@ -2,10 +2,14 @@ package com.engineerfred.kotlin.ktor.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.engineerfred.kotlin.ktor.ui.screens.admin.AdminHomeScreen
+import com.engineerfred.kotlin.ktor.ui.screens.admin.add_admin.AdminRegisterScreen
 import com.engineerfred.kotlin.ktor.ui.screens.admin.login.AdminLoginScreen
+import com.engineerfred.kotlin.ktor.ui.screens.admin.verify_email.VerifyEmailScreen
 import com.engineerfred.kotlin.ktor.ui.screens.student.StudentsHomeScreen
 import com.engineerfred.kotlin.ktor.ui.screens.student.profile_setup.StudentProfileSetupScreen
 import com.engineerfred.kotlin.ktor.ui.screens.student.register.StudentRegisterScreen
@@ -50,9 +54,15 @@ fun MainNavigationGraph(
             route = Routes.StudentRegisterScreen.destination
         ) {
             StudentRegisterScreen(
-                onAuthenticationSuccess = {
+                onNewStudentAuthenticationSuccess = {
                     navController.navigate( Routes.StudentProfileSetUpScreen.destination ) {
                         popUpTo( Routes.StudentProfileSetUpScreen.destination  )
+                        launchSingleTop = true
+                    }
+                },
+                onOldStudentAuthenticationSuccess = {
+                    navController.navigate( Graph.STUDENTS_HOME ) {
+                        popUpTo( Graph.STUDENTS_HOME )
                         launchSingleTop = true
                     }
                 },
@@ -61,7 +71,7 @@ fun MainNavigationGraph(
                         popUpTo( Routes.AdminLoginScreen.destination )
                         launchSingleTop = true
                     }
-                }
+                }, sharedViewModel = sharedViewModel
             )
         }
 
@@ -70,8 +80,8 @@ fun MainNavigationGraph(
         ) {
             AdminLoginScreen(
                 onLoginSuccessful = {
-                    navController.navigate( Routes.AdminDashBoardScreen.destination ) {
-                        popUpTo(Routes.AdminDashBoardScreen.destination)
+                    navController.navigate( Graph.ADMIN_HOME ) {
+                        popUpTo(Graph.ADMIN_HOME)
                         launchSingleTop = true
                     }
                 },
@@ -90,8 +100,8 @@ fun MainNavigationGraph(
         ) {
             StudentProfileSetupScreen(
                 onRegistrationSuccess = {
-                    navController.navigate( Routes.StudentDashBoardScreen.destination ) {
-                        popUpTo( Routes.StudentDashBoardScreen.destination )
+                    navController.navigate( Graph.STUDENTS_HOME ) {
+                        popUpTo( Graph.STUDENTS_HOME )
                         launchSingleTop = true
                     }
                 },
@@ -117,6 +127,34 @@ fun MainNavigationGraph(
             )
         }
 
+        composable(
+            route = Routes.AdminRegisterScreen.destination
+        ) {
+            AdminRegisterScreen(
+                onRegistrationSuccessful = {
+                    navController.navigate( "${Routes.EmailVerificationScreen.destination}/$it") {
+                        popUpTo(Routes.EmailVerificationScreen.destination)
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = "${Routes.EmailVerificationScreen.destination}/{email}",
+            arguments = listOf( navArgument("email") { NavType.StringType } )
+        ) {
+            val email = it.arguments?.getString("email")!!
+            VerifyEmailScreen(
+                email = email,
+                onDoneClicked = {
+                    navController.navigate( Routes.AdminDashBoardScreen.destination ) {
+                        popUpTo( Routes.AdminDashBoardScreen.destination  )
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
     }
 
 }

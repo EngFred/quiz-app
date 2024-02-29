@@ -244,16 +244,25 @@ fun QuizQuestionsScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Text(
-                        text = "Quiz Completed!",
-                        fontSize = 25.sp,
-                        maxLines = 1,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                    ) {
+                        Text(
+                            text = "Quiz Completed! - ",
+                            fontSize = 25.sp,
+                            maxLines = 1,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(
+                            text = "${uiState.correctAnswersCount}/${uiState.listOfTenQuestions.size}",
+                            fontSize = 21.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = if ( !isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else DarkSlateGrey
+                        )
+                    }
                     Text(
                         text = "Thank you for participating!...Play again? Choose a level.",
                         maxLines = 2,
@@ -265,9 +274,15 @@ fun QuizQuestionsScreen(
                     Spacer(modifier = Modifier.size(65.dp))
 
                     LevelSelectionContainer(
-                        onCard1Clicked = {},
-                        onCard2Clicked = {},
-                        onCard3Clicked = {}
+                        onCard1Clicked = {
+                              viewModel.onEvent( QuizQuestionsScreenEvents.LevelCardSelected(it) )
+                        },
+                        onCard2Clicked = {
+                            viewModel.onEvent( QuizQuestionsScreenEvents.LevelCardSelected(it) )
+                        },
+                        onCard3Clicked = {
+                            viewModel.onEvent( QuizQuestionsScreenEvents.LevelCardSelected(it) )
+                        }
                     )
 
                     Spacer(modifier = Modifier.weight(1f))

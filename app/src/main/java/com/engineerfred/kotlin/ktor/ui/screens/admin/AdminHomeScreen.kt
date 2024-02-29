@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,9 +54,9 @@ fun AdminHomeScreen(
             destinationScreen = Routes.AdminDashBoardScreen.destination
         ),
         BottomBarItem(
-            label = "Feedback",
-            description = "feedback",
-            icon = Icons.Rounded.Feedback,
+            label = "Admins",
+            description = "admins",
+            icon = Icons.Rounded.PeopleAlt,
             destinationScreen = Routes.AdminsFeedbackScreen.destination
         )
     )

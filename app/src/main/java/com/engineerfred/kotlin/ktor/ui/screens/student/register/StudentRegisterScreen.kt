@@ -31,21 +31,29 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.ErrorIndicator
 import com.engineerfred.kotlin.ktor.ui.screens.student.register.components.StudentRegisterContainer
+import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.StudentRegisterScreenViewModel
 
 @Composable
 fun StudentRegisterScreen(
     viewModel: StudentRegisterScreenViewModel = hiltViewModel(),
-    onAuthenticationSuccess: () -> Unit,
-    onNotStudentClicked: () -> Unit
+    onNewStudentAuthenticationSuccess: () -> Unit,
+    onOldStudentAuthenticationSuccess: () -> Unit,
+    onNotStudentClicked: () -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
 
     val screenState = viewModel.uiState
     val activity = LocalContext.current as Activity
     val fm = LocalFocusManager.current
 
-
-    if ( screenState.isAuthenticationSuccessful ) onAuthenticationSuccess.invoke()
+    when {
+        screenState.isAuthenticationSuccessfulNewStudent -> onNewStudentAuthenticationSuccess.invoke()
+        screenState.oldStudent != null -> {
+            sharedViewModel.addStudent( screenState.oldStudent )
+            onOldStudentAuthenticationSuccess.invoke()
+        }
+    }
 
     Column(
         modifier = Modifier

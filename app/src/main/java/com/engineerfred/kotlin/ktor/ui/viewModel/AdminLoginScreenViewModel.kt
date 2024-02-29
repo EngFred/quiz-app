@@ -114,7 +114,7 @@ class AdminLoginScreenViewModel @Inject constructor(
             when( status ) {
                 is Response.Error -> {
                     _uiState.value = _uiState.value.copy(
-                        loginError = status.message,
+                        loginError = status.errorMessage,
                         loginInProgress = false
                     )
                 }

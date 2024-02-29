@@ -40,7 +40,7 @@ class QuestionsScreenViewModel @Inject constructor(
                     when(response) {
                         is Response.Error -> {
                             uiState = uiState.copy(
-                                errorMessage = response.message,
+                                errorMessage = response.errorMessage,
                                 isLoading = false
                             )
                         }

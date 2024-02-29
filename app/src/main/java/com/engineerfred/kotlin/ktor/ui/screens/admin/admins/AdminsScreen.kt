@@ -1,4 +1,4 @@
-package com.engineerfred.kotlin.ktor.ui.screens.admin.feedback_review
+package com.engineerfred.kotlin.ktor.ui.screens.admin.admins
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FeedbackScreen() {
+fun AdminsScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ) {
-        Text(text = "Admins feedback review screen")
+        Text(text = "All Admins screen")
     }
 }

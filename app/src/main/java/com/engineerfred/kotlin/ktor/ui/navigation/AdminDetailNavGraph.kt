@@ -6,10 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.engineerfred.kotlin.ktor.ui.screens.admin.add_admin.AdminRegisterScreen
 import com.engineerfred.kotlin.ktor.ui.screens.admin.create_update.CreateUpdateScreen
 import com.engineerfred.kotlin.ktor.ui.screens.admin.home.QuestionsScreen
-import com.engineerfred.kotlin.ktor.ui.screens.admin.verify_email.VerifyEmailScreen
 
 fun NavGraphBuilder.adminDetailNavGraph( navController: NavHostController ) {
     navigation(
@@ -62,35 +60,6 @@ fun NavGraphBuilder.adminDetailNavGraph( navController: NavHostController ) {
                 subject,
                 onBackClicked = {
                     navController.navigateUp()
-                }
-            )
-        }
-
-        composable(
-            route = Routes.AdminRegisterScreen.destination
-        ) {
-            AdminRegisterScreen(
-                onRegistrationSuccessful = {
-                    navController.navigate( "${Routes.EmailVerificationScreen.destination}/$it") {
-                        popUpTo(Routes.EmailVerificationScreen.destination)
-                        launchSingleTop = true
-                    }
-                }
-            )
-        }
-
-        composable(
-            route = "${Routes.EmailVerificationScreen.destination}/{email}",
-            arguments = listOf( navArgument("email") { NavType.StringType } )
-        ) {
-            val email = it.arguments?.getString("email")!!
-            VerifyEmailScreen(
-                email = email,
-                onDoneClicked = {
-                    navController.navigate( Routes.AdminDashBoardScreen.destination ) {
-                        popUpTo( Routes.AdminDashBoardScreen.destination  )
-                        launchSingleTop = true
-                    }
                 }
             )
         }

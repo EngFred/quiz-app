@@ -46,7 +46,7 @@ class WelcomeScreenViewModel @Inject constructor(
                 is Response.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = admin.message
+                        error = admin.errorMessage
                     )
                 }
                 Response.Undefined -> Unit
@@ -74,7 +74,7 @@ class WelcomeScreenViewModel @Inject constructor(
                     is Response.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
-                            error = it.message
+                            error = it.errorMessage
                         )
                     }
                     Response.Undefined -> Unit
