@@ -1,7 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.viewModel
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +14,7 @@ import com.engineerfred.kotlin.ktor.ui.screens.student.profile_setup.StudentProf
 import com.engineerfred.kotlin.ktor.util.Constants.LOGGED_IN_USER_ID
 import com.engineerfred.kotlin.ktor.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -94,48 +93,22 @@ class StudentProfileSetupScreenViewModel @Inject constructor(
 
     private fun registerNewStudent( context: Context ) {
         LOGGED_IN_USER_ID?.let {
-            viewModelScope.launch {
-                getCurrentlyLoggedStudentUseCase.invoke(it).collectLatest { response ->
-                    when ( response ) {
-                        is Response.Error -> {
-                            uiState = uiState.copy(
-                                registrationInProgress = false,
-                                registrationError = response.errorMessage
-                            )
-                        }
-                        is Response.Success -> {
-                            if ( response.data != null ) {
-                                uiState = uiState.copy(
-                                    id = response.data.id,
-                                    nameValue = response.data.name,
-                                    profileImageUrl = Uri.parse(response.data.profileImage),
-                                    bioValue = response.data.about ?: "",
-                                    englishLevel = response.data.englishLevel,
-                                    mathLevel = response.data.mathLevel,
-                                    dateJoined = response.data.dateJoined,
-                                )
-                                uiState = uiState.copy(registrationSuccessful = true)
-                            } else {
-                                uiState = uiState.copy( id = it )
-                                val task = addStudentUseCase.invoke( uiState.student, context )
-                                when (task) {
-                                    is Response.Error -> {
-                                        uiState = uiState.copy(
-                                            registrationInProgress = false,
-                                            registrationError = task.errorMessage
-                                        )
-                                    }
-                                    is Response.Success -> {
-                                        uiState = uiState.copy(
-                                            registrationSuccessful = true
-                                        )
-                                    }
-                                    Response.Undefined -> Unit
-                                }
-                            }
-                        }
-                        Response.Undefined -> Unit
+            viewModelScope.launch(Dispatchers.IO) {
+                uiState = uiState.copy( id = it )
+                val task = addStudentUseCase.invoke( uiState.student, context )
+                when (task) {
+                    is Response.Error -> {
+                        uiState = uiState.copy(
+                            registrationInProgress = false,
+                            registrationError = task.errorMessage
+                        )
                     }
+                    is Response.Success -> {
+                        uiState = uiState.copy(
+                            registrationSuccessful = true
+                        )
+                    }
+                    Response.Undefined -> Unit
                 }
             }
         }

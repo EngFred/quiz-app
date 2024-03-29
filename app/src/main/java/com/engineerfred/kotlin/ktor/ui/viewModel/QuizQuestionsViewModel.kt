@@ -14,6 +14,7 @@ import com.engineerfred.kotlin.ktor.ui.model.Level
 import com.engineerfred.kotlin.ktor.ui.model.Subject
 import com.engineerfred.kotlin.ktor.ui.screens.student.questions.QuizQuestionsScreenEvents
 import com.engineerfred.kotlin.ktor.ui.screens.student.questions.QuizQuestionsScreenState
+import com.engineerfred.kotlin.ktor.util.Constants
 import com.engineerfred.kotlin.ktor.util.Constants.LOGGED_IN_USER_ID
 import com.engineerfred.kotlin.ktor.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,12 +33,17 @@ class QuizQuestionsViewModel @Inject constructor(
     var uiState by mutableStateOf(QuizQuestionsScreenState())
         private set
 
+    private val level = savedStateHandle.get<String>(Constants.LEVEL_KEY)
+    private val subject = savedStateHandle.get<String>(Constants.SUBJECT_KEY)
+
     companion object {
         private val TAG = QuizQuestionsViewModel::class.java.simpleName
     }
 
     init {
-        initialiseUiState()
+        if ( subject != null && level != null ) {
+            initialiseUiState(subject, level)
+        }
     }
 
     fun onEvent( event: QuizQuestionsScreenEvents ) {
@@ -203,13 +209,49 @@ class QuizQuestionsViewModel @Inject constructor(
             }
 
             QuizQuestionsScreenEvents.RepeatLevelClicked -> {
+                if (subject == Subject.English.name) {
+                    when (uiState.studentLevel) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 140
+                            )
+                        }
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 100
+                            )
+                        }
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 45
+                            )
+                        }
+                    }
+                } else {
+                    when (uiState.studentLevel) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 180
+                            )
+                        }
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 120
+                            )
+                        }
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 80
+                            )
+                        }
+                    }
+                }
                 uiState = uiState.copy(
                     levelEnded = false,
                     timeUp = false,
                     questions = uiState.questions.reversed().shuffled(),
                     currentQuestionIndex = 0,
                     correctAnswersCount = 0,
-                    timeLeft = 60,
                     correctAnswerTaps = 0,
                     userAnswer = ""
                 )
@@ -222,6 +264,46 @@ class QuizQuestionsViewModel @Inject constructor(
             }
 
             is QuizQuestionsScreenEvents.LevelCardSelected -> {
+
+                if ( subject == Subject.English.name ) {
+                    when (event.level) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 145
+                            )
+                        }
+
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 100
+                            )
+                        }
+
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 45
+                            )
+                        }
+                    }
+                } else {
+                    when (event.level) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 180
+                            )
+                        }
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 120
+                            )
+                        }
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 80
+                            )
+                        }
+                    }
+                }
 
                 uiState = uiState.copy(
                     isLoading = true,
@@ -259,12 +341,14 @@ class QuizQuestionsViewModel @Inject constructor(
                                     questions = response.data.shuffled().reversed()
                                 )
                                 Log.v( TAG, "Success: Received ${response.data.size} $subject questions @$nextLevel level!")
-                                val listOfTenQuestions = uiState.questions.subList(0, 10)
-                                val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
-                                uiState = uiState.copy(
-                                    listOfTenQuestions = listOfTenQuestions,
-                                    currentQuestion = currentQuestion
-                                )
+                                if ( uiState.questions.isNotEmpty() ) {
+                                    val listOfTenQuestions = uiState.questions.subList(0, 10)
+                                    val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
+                                    uiState = uiState.copy(
+                                        listOfTenQuestions = listOfTenQuestions,
+                                        currentQuestion = currentQuestion
+                                    )
+                                }
                             }
                             Response.Undefined -> Unit
                         }
@@ -301,73 +385,110 @@ class QuizQuestionsViewModel @Inject constructor(
             }
         }
     }
-    private fun initialiseUiState() {
+    private fun initialiseUiState( subject: String, level: String ) {
+        if ( level == Level.Advanced.name ) {
+            uiState = uiState.copy(
+                quizCompleted = true
+            )
+        }
         viewModelScope.launch(Dispatchers.IO) {
-            savedStateHandle.getStateFlow("subject", "").collectLatest { subject ->
-                when (subject) {
-                    Subject.English.name -> {
-                        savedStateHandle.getStateFlow("level", "").collectLatest { level ->
-                            getEnglishQuestionsUseCase.invoke(level).collectLatest { response ->
-                                when (response) {
-                                    is Response.Error -> {
-                                        uiState = uiState.copy(
-                                            isLoading = false,
-                                            serverError = response.errorMessage
-                                        )
-                                        Log.v(TAG, "Error: ${response.errorMessage}!")
-                                    }
-                                    is Response.Success -> {
-                                        uiState = uiState.copy(
-                                            isLoading = false,
-                                            questions = response.data.shuffled(),
-                                            studentLevel = level,
-                                            currentSubject = subject
-                                        )
-                                        Log.v( TAG, "Success: Received ${response.data.size} $subject questions @$level level!")
-                                        val listOfTenQuestions = uiState.questions.subList(0, 10)
-                                        val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
-                                        uiState = uiState.copy(
-                                            listOfTenQuestions = listOfTenQuestions,
-                                            currentQuestion = currentQuestion
-                                        )
-                                        Log.v(TAG, "The initial UiState data: ${uiState}!")
-                                    }
-                                    Response.Undefined -> Unit
-                                }
+            when (subject) {
+                Subject.English.name -> {
+                    getEnglishQuestionsUseCase.invoke(level).collectLatest { response ->
+                        when (response) {
+                            is Response.Error -> {
+                                uiState = uiState.copy(
+                                    isLoading = false,
+                                    serverError = response.errorMessage
+                                )
+                                Log.v(TAG, "Error: ${response.errorMessage}!")
                             }
+                            is Response.Success -> {
+                                when (level) {
+                                    Level.Beginner.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 145
+                                        )
+                                    }
+                                    Level.Intermediate.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 100
+                                        )
+                                    }
+                                    Level.Advanced.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 45
+                                        )
+                                    }
+                                }
+                                uiState = uiState.copy(
+                                    isLoading = false,
+                                    questions = response.data.shuffled(),
+                                    studentLevel = level,
+                                    currentSubject = subject
+                                )
+                                Log.v( TAG, "Success: Received ${response.data.size} $subject questions @$level level!")
+                                if ( uiState.questions.isNotEmpty() ) {
+                                    val listOfTenQuestions = uiState.questions.subList(0, 10)
+                                    val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
+                                    uiState = uiState.copy(
+                                        listOfTenQuestions = listOfTenQuestions,
+                                        currentQuestion = currentQuestion
+                                    )
+                                }
+                                Log.v(TAG, "The initial UiState data: ${uiState}!")
+                            }
+                            Response.Undefined -> Unit
                         }
                     }
+                }
 
-                    Subject.Mathematics.name -> {
-                        savedStateHandle.getStateFlow("level", "").collectLatest { level ->
-                            getMathQuestionsUseCase.invoke(level).collectLatest { response ->
-                                when (response) {
-                                    is Response.Error -> {
-                                        uiState = uiState.copy(
-                                            isLoading = false,
-                                            serverError = response.errorMessage
-                                        )
-                                        Log.v(TAG, "Error: ${response.errorMessage}!")
-                                    }
-                                    is Response.Success -> {
-                                        uiState = uiState.copy(
-                                            isLoading = false,
-                                            questions = response.data.shuffled(),
-                                            studentLevel = level,
-                                            currentSubject = subject
-                                        )
-                                        Log.v( TAG, "Success: Received ${response.data.size} $subject questions @$level level!" )
-                                        val listOfTenQuestions = uiState.questions.subList(0, 10)
-                                        val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
-                                        uiState = uiState.copy(
-                                            listOfTenQuestions = listOfTenQuestions,
-                                            currentQuestion = currentQuestion
-                                        )
-                                        Log.v(TAG, "The initial UiState data: ${uiState}!")
-                                    }
-                                    Response.Undefined -> Unit
-                                }
+                Subject.Mathematics.name -> {
+                    getMathQuestionsUseCase.invoke(level).collectLatest { response ->
+                        when (response) {
+                            is Response.Error -> {
+                                uiState = uiState.copy(
+                                    isLoading = false,
+                                    serverError = response.errorMessage
+                                )
+                                Log.v(TAG, "Error: ${response.errorMessage}!")
                             }
+                            is Response.Success -> {
+                                when (level) {
+                                    Level.Beginner.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 180
+                                        )
+                                    }
+                                    Level.Intermediate.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 120
+                                        )
+                                    }
+                                    Level.Advanced.name -> {
+                                        uiState = uiState.copy(
+                                            timeLeft = 80
+                                        )
+                                    }
+                                }
+                                uiState = uiState.copy(
+                                    isLoading = false,
+                                    questions = response.data.shuffled(),
+                                    studentLevel = level,
+                                    currentSubject = subject
+                                )
+                                Log.v( TAG, "Success: Received ${response.data.size} $subject questions @$level level!" )
+                                if ( uiState.questions.isNotEmpty() ) {
+                                    val listOfTenQuestions = uiState.questions.subList(0, 10)
+                                    val currentQuestion = listOfTenQuestions[uiState.currentQuestionIndex]
+                                    uiState = uiState.copy(
+                                        listOfTenQuestions = listOfTenQuestions,
+                                        currentQuestion = currentQuestion
+                                    )
+                                }
+                                Log.v(TAG, "The initial UiState data: ${uiState}!")
+                            }
+                            Response.Undefined -> Unit
                         }
                     }
                 }

@@ -29,7 +29,7 @@ class QuestionsRepoImpl @Inject constructor (
     override suspend fun setQuestion(question: Question): Response<Any> {
         return try {
 
-            val result = db.collection( QUESTIONS_COLLECTION ).document( "${question.id}" ).set(question).await()
+            val result = db.collection( QUESTIONS_COLLECTION ).document(question.id).set(question).await()
             Response.Success(result)
 
         } catch ( ex: Exception ) {
@@ -41,7 +41,7 @@ class QuestionsRepoImpl @Inject constructor (
 
     override suspend fun updateQuestion(question: Question): Response<Any> {
         return try {
-            val result = db.collection( QUESTIONS_COLLECTION ).document( "${question.id}" ).set(question).await()
+            val result = db.collection( QUESTIONS_COLLECTION ).document(question.id).set(question).await()
             Response.Success(result)
         } catch ( ex: Exception ) {
             if ( ex is CancellationException ) throw  ex
@@ -52,7 +52,7 @@ class QuestionsRepoImpl @Inject constructor (
 
     override suspend fun deleteQuestion(question: Question): Response<Any> {
         return try {
-            val result = db.collection( QUESTIONS_COLLECTION ).document( "${question.id}" ).delete().await()
+            val result = db.collection( QUESTIONS_COLLECTION ).document(question.id).delete().await()
             Response.Success(result)
         } catch ( ex: Exception ) {
             if ( ex is CancellationException ) throw  ex
@@ -68,7 +68,7 @@ class QuestionsRepoImpl @Inject constructor (
                 .addSnapshotListener { value, error ->
                     if ( error != null ) {
                         Log.v(TAG, "Snapshot error: $error")
-                        return@addSnapshotListener
+                        trySend(Response.Error("$error"))
                     }
                     if( value != null ) {
                         Log.v(TAG, "Received a question snapshot")
@@ -79,7 +79,7 @@ class QuestionsRepoImpl @Inject constructor (
             awaitClose { task.remove() }
         }.catch {
             Log.d(TAG, "Error while getting $subject questions! $it")
-            emit( Response.Success(emptyList()) )
+            emit( Response.Error("$it") )
         }.flowOn( Dispatchers.IO )
     }
 
@@ -91,7 +91,7 @@ class QuestionsRepoImpl @Inject constructor (
                 .addSnapshotListener { value, error ->
                     if ( error != null ) {
                         Log.v(TAG, "Snapshot error: $error")
-                        return@addSnapshotListener
+                        trySend(Response.Error("$error"))
                     }
                     if( value != null ) {
                         Log.v(TAG, "Received an english question snapshot")
@@ -102,19 +102,20 @@ class QuestionsRepoImpl @Inject constructor (
             awaitClose { task.remove() }
         }.catch {
             Log.d(TAG, "Error while getting english questions! $it")
-            emit( Response.Success(emptyList()) )
+            emit( Response.Error("$it") )
         }.flowOn( Dispatchers.IO )
     }
 
     override fun getMathQuestions(level: String): Flow<Response<List<Question>>> {
         return callbackFlow {
+            trySend(Response.Undefined)
             val task = db.collection( QUESTIONS_COLLECTION )
                 .whereEqualTo("subject", Subject.Mathematics.name )
                 .whereEqualTo("level", level )
                 .addSnapshotListener { value, error ->
                     if ( error != null ) {
                         Log.v(TAG, "Snapshot error: $error")
-                        return@addSnapshotListener
+                        trySend(Response.Error("$error"))
                     }
                     if( value != null ) {
                         Log.v(TAG, "Received a mathematics question snapshot")
@@ -125,7 +126,7 @@ class QuestionsRepoImpl @Inject constructor (
             awaitClose { task.remove() }
         }.catch {
             Log.d(TAG, "Error while getting mathematics questions! $it")
-            emit( Response.Success(emptyList()) )
+            emit( Response.Error("$it") )
         }.flowOn( Dispatchers.IO )
     }
 

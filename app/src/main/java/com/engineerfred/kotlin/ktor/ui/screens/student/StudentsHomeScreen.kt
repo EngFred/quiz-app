@@ -1,5 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.screens.student
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,10 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
@@ -38,6 +42,15 @@ fun StudentsHomeScreen(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
+    val view = LocalView.current
+    val colorScheme = MaterialTheme.colorScheme
+
+    LaunchedEffect(key1 = Unit) {
+        val window = (view.context as Activity).window
+        window.statusBarColor = colorScheme.primary.toArgb()
+        window.navigationBarColor = colorScheme.primary.toArgb()
+    }
 
 
     val student = sharedViewModel.student

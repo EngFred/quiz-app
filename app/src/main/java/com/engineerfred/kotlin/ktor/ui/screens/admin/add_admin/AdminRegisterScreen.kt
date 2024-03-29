@@ -1,5 +1,9 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.add_admin
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,16 +17,21 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomButtonComponent
@@ -31,15 +40,28 @@ import com.engineerfred.kotlin.ktor.ui.viewModel.AdminRegisterScreenViewModel
 
 @Composable
 fun AdminRegisterScreen(
-    onRegistrationSuccessful: (email: String) -> Unit,
+    onRegistrationSuccessful: () -> Unit,
     viewModel: AdminRegisterScreenViewModel = hiltViewModel()
 ) {
     val fm = LocalFocusManager.current
 
     val uiState = viewModel.uiState.collectAsState().value
 
+    val view = LocalView.current
+    val colorScheme = MaterialTheme.colorScheme
+    val isDarkTheme = isSystemInDarkTheme()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        val window = (view.context as Activity).window
+        window.statusBarColor = colorScheme.surface.toArgb()
+        window.navigationBarColor = colorScheme.surface.toArgb()
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
+        WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !isDarkTheme
+    }
+
     if (  uiState.adminEmail != null ) {
-        onRegistrationSuccessful.invoke( uiState.adminEmail )
+        restartApp(context)
     }
 
     Column(
@@ -115,4 +137,13 @@ fun AdminRegisterScreen(
             )
         }
     }
+}
+
+private fun restartApp( context: Context ) {
+    val pm = context.packageManager
+    val intent = pm.getLaunchIntentForPackage(context.packageName)
+    val componentName = intent!!.component
+    val restartIntent = Intent.makeRestartActivityTask(componentName)
+    context.startActivity(restartIntent)
+    Runtime.getRuntime().exit(0)
 }

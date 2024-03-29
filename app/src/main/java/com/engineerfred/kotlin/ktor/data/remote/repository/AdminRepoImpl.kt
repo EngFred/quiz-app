@@ -35,19 +35,23 @@ class AdminRepoImpl @Inject constructor (
     }
 
     override suspend fun registerAdmin(admin: Admin):  Response<FirebaseUser> {
-        return withContext( NonCancellable ) {
-            try {
+        return try {
+            withContext(NonCancellable) {
                 val authResult = auth.createUserWithEmailAndPassword( admin.email, admin.password ).await()
-                val user = authResult.user!!
-                user.sendEmailVerification().await()
-                val authenticatedAdmin = admin.copy( id = user.uid )
-                db.collection( ADMINS_COLLECTION ).document(authenticatedAdmin.id).set( authenticatedAdmin ).await()
-                Log.d(TAG, "Admin with email ${admin.email} has been registered successfully!")
-                Response.Success(user)
-            }catch (ex: Exception ) {
-                Log.d(TAG, "Failed to register admin! $ex")
-                Response.Error("$ex")
+                val user = authResult.user
+                //user.sendEmailVerification().await()
+                if ( user != null){
+                    val authenticatedAdmin = admin.copy( id = user.uid )
+                    db.collection( ADMINS_COLLECTION ).document(authenticatedAdmin.id).set( authenticatedAdmin ).await()
+                    Log.d(TAG, "Admin with email ${admin.email} has been registered successfully!")
+                    Response.Success(user)
+                } else {
+                    Response.Error("Something went wrong!!")
+                }
             }
+        }catch (ex: Exception ) {
+            Log.d(TAG, "Failed to register admin! $ex")
+            Response.Error("$ex")
         }
     }
 
@@ -55,21 +59,35 @@ class AdminRepoImpl @Inject constructor (
         return try {
             val authResult = auth.signInWithEmailAndPassword( email, password ).await()
             val user = authResult?.user
-            if (user?.isEmailVerified == true) {
-                Log.d(TAG, "Admin login has been logged successfully!")
+            if ( user != null ) {
                 val admin = checkIfAdminExistsInDatabase( user.uid )
                 return when ( admin ) {
                     is Response.Error -> {
                         Response.Error(admin.errorMessage)
                     }
                     is Response.Success -> {
-                        if ( admin.data != null ) Response.Success(admin.data) else Response.Success(null )
+                        Response.Success(admin.data)
                     }
                     Response.Undefined -> Response.Undefined
                 }
             } else {
-                Response.Error("Email for this account was not verified!")
+                Response.Error("Admin not found")
             }
+//            if (user?.isEmailVerified == true) {
+//                Log.d(TAG, "Admin login has been logged successfully!")
+//                val admin = checkIfAdminExistsInDatabase( user.uid )
+//                return when ( admin ) {
+//                    is Response.Error -> {
+//                        Response.Error(admin.errorMessage)
+//                    }
+//                    is Response.Success -> {
+//                        if ( admin.data != null ) Response.Success(admin.data) else Response.Success(null )
+//                    }
+//                    Response.Undefined -> Response.Undefined
+//                }
+//            } else {
+//                Response.Error("Email for this account was not verified!")
+//            }
         }catch (ex: Exception ) {
             if ( ex is CancellationException ) throw ex
             if ( ex is FirebaseAuthInvalidCredentialsException ) return Response.Error(WRONG_EMAIL_OR_PASSWORD_EXCEPTION)
@@ -102,7 +120,7 @@ class AdminRepoImpl @Inject constructor (
             val snapshot = db.collection( ADMINS_COLLECTION ).addSnapshotListener { value, error ->
                 if ( error != null ) {
                     Log.v(TAG, "Snapshot error: $error")
-                    return@addSnapshotListener
+                    trySend( Response.Error("$error") )
                 }
                 if( value != null ) {
                     Log.v(TAG, "Received an admin snapshot")
@@ -112,8 +130,7 @@ class AdminRepoImpl @Inject constructor (
             awaitClose { snapshot.remove() }
         }.catch {
             Log.d(TAG, "Failed to get admins! $it")
-
-            emit( Response.Success(emptyList()) )
+            emit( Response.Error("$it") )
         }.flowOn( Dispatchers.IO )
     }
 
@@ -135,28 +152,10 @@ class AdminRepoImpl @Inject constructor (
     }
 
     override suspend fun checkIfAdminExistsInDatabase( id: String ): Response<Admin?> {
-        //this function is called after auth.currentUser.isEmailVerified = true
         return try {
-            val ref = db.collection( ADMINS_COLLECTION ).document( id )
-            val snapshot = ref.get().await()
-            if ( snapshot.exists() ) {
-                Log.d(TAG, "Admin exists in the database!")
-                val admin = snapshot.toObject( Admin::class.java )
-                if ( admin != null ) {
-                    if ( admin.isDeleted ) {
-                        Log.d(TAG, "But was deleted!")
-                        db.collection( ADMINS_COLLECTION ).document( id ).delete().await()
-                        auth.currentUser?.delete()?.await()
-                        Response.Success(null )
-                    }
-                    Response.Success( admin )
-                }else {
-                    Response.Success( null )
-                }
-            } else {
-                auth.currentUser?.delete()?.await()
-                Response.Success( null )
-            }
+            val docSnapshot = db.collection( ADMINS_COLLECTION ).document( id ).get().await()
+            val admin = docSnapshot.toObject( Admin::class.java )
+            Response.Success( admin )
         } catch ( ex: Exception ) {
             if ( ex is CancellationException ) throw ex
             Log.d(TAG, "Error while checking if the admin exists in the database! $ex")

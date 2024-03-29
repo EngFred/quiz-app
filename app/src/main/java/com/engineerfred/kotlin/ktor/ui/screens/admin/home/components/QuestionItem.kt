@@ -58,7 +58,7 @@ fun QuestionItem(
             LevelIndicator(level = question.level)
             Text(
                 modifier = Modifier.padding(start = 5.dp),
-                text = question.setBy,
+                text = if(question.setBy != "null") question.setBy else "...",
                 fontSize = 12.sp,
                 color = Color.Gray,
                 maxLines = 1,

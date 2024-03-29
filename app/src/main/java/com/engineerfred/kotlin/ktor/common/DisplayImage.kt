@@ -2,6 +2,7 @@ package com.engineerfred.kotlin.ktor.common
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import coil.request.CachePolicy
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.SuccessResult
+import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 import kotlinx.coroutines.Dispatchers
 
@@ -47,6 +49,7 @@ fun DisplayImage(
         .dispatcher(Dispatchers.IO)
         .memoryCacheKey(imageUrl)
         .diskCacheKey(imageUrl)
+        .placeholder(R.drawable.student)
         .diskCachePolicy(CachePolicy.ENABLED)
         .memoryCachePolicy(CachePolicy.ENABLED)
         .build()
@@ -57,7 +60,7 @@ fun DisplayImage(
         modifier = modifier
             .size(44.dp)
             .clip(CircleShape)
-            .background(Color.LightGray),
+            .background(Color.LightGray).border(1.dp, Color.White, CircleShape),
         contentScale = ContentScale.Crop
     )
 

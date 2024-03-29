@@ -42,10 +42,10 @@ fun BottomBar(
         items.forEach {
             NavigationBarItem(
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.White,
-                    selectedTextColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.White,
-                    unselectedIconColor = if ( !isSystemInDarkTheme() ) Color.White else Color.Black,
-                    unselectedTextColor = if ( !isSystemInDarkTheme() ) Color.White else Color.Black,
+                    selectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.DarkGray,
+                    unselectedTextColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.DarkGray,
                     indicatorColor = MaterialTheme.colorScheme.primary
                 ),
                 selected = currentDestination?.route == it.destinationScreen,

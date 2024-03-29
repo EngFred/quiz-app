@@ -1,5 +1,6 @@
 package com.engineerfred.kotlin.ktor.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun CustomButtonComponent(
@@ -62,7 +64,7 @@ fun CustomButtonComponent(
             }
         } else {
             CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary,
+                color = if (isSystemInDarkTheme()) Color.White else SeaGreen,
                 modifier = Modifier.size(48.dp)
             )
         }

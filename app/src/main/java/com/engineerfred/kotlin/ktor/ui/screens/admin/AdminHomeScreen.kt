@@ -1,8 +1,11 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,9 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -33,6 +39,7 @@ import com.engineerfred.kotlin.ktor.ui.model.BottomBarItem
 import com.engineerfred.kotlin.ktor.ui.navigation.AdminHomeNavigationGraph
 import com.engineerfred.kotlin.ktor.ui.navigation.Routes
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun AdminHomeScreen(
@@ -45,6 +52,8 @@ fun AdminHomeScreen(
     val currentDestination = navBackStackEntry?.destination
 
     val admin = sharedViewModel.admin
+
+    val context = LocalContext.current
 
     val bottomBarItems = listOf(
         BottomBarItem(
@@ -61,8 +70,7 @@ fun AdminHomeScreen(
         )
     )
 
-    admin?.let {
-
+    if ( admin != null ) {
         Scaffold(
             topBar = {
                 if ( bottomBarItems.any { it.destinationScreen == currentDestination?.route } ) {
@@ -81,7 +89,15 @@ fun AdminHomeScreen(
                             color = Color.White
                         )
 
-                        IconButton(onClick = { onAddAdminClicked.invoke() }) {
+                        IconButton(
+                            onClick = {
+                                if ( FirebaseAuth.getInstance().currentUser?.email == "omongolealfred4@gmail.com" || FirebaseAuth.getInstance().currentUser?.email == "engfred88@gmail.com" ) {
+                                    onAddAdminClicked.invoke()
+                                } else {
+                                    Toast.makeText(context, "You need to be a superuser to add admins!", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Rounded.AddCircle,
                                 contentDescription = stringResource(R.string.add_admin),
@@ -108,6 +124,16 @@ fun AdminHomeScreen(
             )
         }
 
+    } else {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(
+                text = "Please Restart the app.",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center
+            )
+        }
     }
+
 
 }

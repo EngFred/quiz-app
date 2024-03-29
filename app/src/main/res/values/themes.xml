@@ -4,7 +4,7 @@
     <style name="Theme.Ktor" parent="android:Theme.Material.Light.NoActionBar" />
     <style name="splash_theme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/quiz</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
         <item name="postSplashScreenTheme">@style/Theme.Ktor</item>
     </style>
 

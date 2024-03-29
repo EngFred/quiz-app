@@ -19,7 +19,6 @@ import com.engineerfred.kotlin.ktor.ui.navigation.Routes
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.WelcomeScreenViewModel
-import com.engineerfred.kotlin.ktor.util.Constants.LOGGED_IN_USER
 import com.engineerfred.kotlin.ktor.util.Constants.userIsCurrentlyLoggedIn
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,7 +58,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         User.Admin.name.lowercase() -> {
-                            if ( userIsCurrentlyLoggedIn && LOGGED_IN_USER!!.isEmailVerified ) {
+                            if ( userIsCurrentlyLoggedIn ) {
                                 when (state.adminNotInDatabase) {
                                     true -> {
                                         Routes.AdminLoginScreen.destination

@@ -2,11 +2,10 @@ package com.engineerfred.kotlin.ktor.ui.screens.student.questions.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -63,15 +62,14 @@ fun ChoiceCard(
         Row ( modifier = Modifier
             .fillMaxWidth()
             .background(cardColor)
-            .padding(horizontal = 10.dp)
-            .height(55.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 10.dp, vertical = 10.dp)
+            .wrapContentHeight(),
+            verticalAlignment = Alignment.Top,
         ){
             Text(
                 text = answerChoice,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(end = 14.dp),
+                modifier = Modifier.weight(1f).padding(end = 14.dp),
                 color = textColor
             )
             Icon(

@@ -226,8 +226,7 @@ class AdminRegisterScreenViewModel @Inject constructor(
                 }
                 is Response.Success -> {
                     _uiState.value = _uiState.value.copy(
-                        adminEmail = status.data.email, // to enable navigation to the next screen that shows that email verification code has been sent
-                        registrationInProgress = false
+                        adminEmail = status.data.email
                     )
                 }
                 Response.Undefined -> Unit

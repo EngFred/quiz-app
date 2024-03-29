@@ -78,7 +78,7 @@ private fun CharView(
                     else -> Color.LightGray
                 }, RoundedCornerShape(8.dp)
             )
-            .padding(top = 0.dp),
+            .padding(top = 8.dp),
         fontSize = 28.sp,
         text = char,
         color = if (isFocused) {

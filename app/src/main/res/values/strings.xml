@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quiz</string>
+    <string name="app_name">QuizQuest</string>
     <string name="leading_icon">leading icon</string>
     <string name="trailing_icon">trailing icon</string>
     <string name="add_admin">add admin</string>

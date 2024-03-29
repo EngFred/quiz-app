@@ -9,7 +9,7 @@ data class QuizQuestionsScreenState(
     val currentQuestion: Question? = null,
     val correctAnswerTaps: Int = 0,
     val timeUp: Boolean = false,
-    val timeLeft: Int = 60,
+    val timeLeft: Int = 0,
     val currentSubject: String = "",
     val upgradingLevel: Boolean = false,
     val upgradingLevelError: String? = null,

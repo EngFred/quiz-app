@@ -39,11 +39,11 @@ fun StudentsHomeNavigationGraph(
         composable(
             route = Routes.StudentsScreen.destination
         ) {
-            AllStudentsScreen()
+            AllStudentsScreen(modifier)
         }
 
         //nested nav graph
-        studentsDetailNavGraph( navController )
+        studentsDetailNavGraph( navController, sharedViewModel )
 
     }
 

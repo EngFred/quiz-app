@@ -8,6 +8,8 @@ object Constants {
     const val ADMINS_COLLECTION = "admins"
     const val STUDENTS_COLLECTION = "students"
     const val QUESTIONS_COLLECTION = "questions"
+    const val LEVEL_KEY = "level"
+    const val SUBJECT_KEY = "subject"
 
     const val STUDENTS_PROFILE_IMAGES_FOLDER = "students_profile_image"
 

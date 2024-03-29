@@ -119,17 +119,9 @@ class AdminLoginScreenViewModel @Inject constructor(
                     )
                 }
                 is Response.Success -> {
-                    if ( status.data != null ) { //we have successfully returned an admin
-                        _uiState.value = _uiState.value.copy(
-                            admin = status.data,
-                            loginInProgress = false
-                        )
-                    } else {
-                        _uiState.value = _uiState.value.copy(
-                            loginError = "The admin with the provided credentials was deleted!",
-                            loginInProgress = false
-                        )
-                    }
+                    _uiState.value = _uiState.value.copy(
+                        admin = status.data
+                    )
                 }
                 Response.Undefined -> Unit
             }
