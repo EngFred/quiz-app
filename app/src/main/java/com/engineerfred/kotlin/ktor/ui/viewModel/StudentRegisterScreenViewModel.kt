@@ -198,25 +198,24 @@ class StudentRegisterScreenViewModel @Inject constructor(
                         registrationError = response.errorMessage
                     )
                 }
-                Response.Undefined -> Unit
                 is Response.Success -> {
                     if ( response.data == null ) {
                         uiState = uiState.copy(
-                            isAuthenticationSuccessfulNewStudent = true
+                            isAuthenticationSuccessfulNewStudent = true,
+                            oldStudent = null
                         )
+                        Log.i("Lol", "This is a new user!")
                     } else {
                         uiState = uiState.copy(
-                            oldStudent = response.data
+                            oldStudent = response.data,
+                            isAuthenticationSuccessfulNewStudent = false
                         )
+                        Log.i("Lol", "This is an old user!")
                     }
                 }
+                Response.Undefined -> Unit
             }
         }
     }
-
-//    override fun onCleared() {
-//        activityRef.clear()
-//        super.onCleared()
-//    }
 
 }

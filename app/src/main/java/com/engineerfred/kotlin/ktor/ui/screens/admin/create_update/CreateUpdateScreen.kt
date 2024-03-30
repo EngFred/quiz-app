@@ -1,8 +1,10 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.create_update
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.FloatingActionButton
@@ -30,9 +33,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
@@ -47,6 +52,8 @@ import com.engineerfred.kotlin.ktor.common.ProgressIndicator
 import com.engineerfred.kotlin.ktor.common.SuccessIndicator
 import com.engineerfred.kotlin.ktor.ui.model.AnswerType
 import com.engineerfred.kotlin.ktor.ui.screens.admin.create_update.components.AddQuestionContainer
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.CreateUpdateScreenViewModel
 
 @Composable
@@ -58,10 +65,30 @@ fun CreateUpdateScreen(
 ) {
 
     val screenState = viewModel.uiState
+    val context = LocalContext.current
 
-    if ( screenState.updateCompleted ) {
+    LaunchedEffect(key1 = screenState.deleteError) {
+        if ( !screenState.deleteError.isNullOrEmpty() ) {
+            Toast.makeText(context, screenState.deleteError, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    if ( screenState.updateCompleted || screenState.deleteSuccessful ) {
         onBackClicked.invoke()
     }
+
+    LaunchedEffect(key1 = screenState.deleteSuccessful) {
+        if ( screenState.deleteSuccessful ) {
+            Toast.makeText(context,"Question deleted successfully!", Toast.LENGTH_LONG ).show()
+        }
+    }
+
+    LaunchedEffect(key1 = screenState.updateCompleted) {
+        if ( screenState.updateCompleted ) {
+            Toast.makeText(context,"Question updated successfully!", Toast.LENGTH_LONG ).show()
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -86,15 +113,45 @@ fun CreateUpdateScreen(
                     fontSize = 17.sp,
                     color = Color.White,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
                 )
+                AnimatedVisibility(visible = questionId != null) {
+                    if ( !screenState.isDeleting ) {
+                        IconButton(onClick = {
+                            if ( !screenState.addingQuestionInProgress ) {
+                                viewModel.onEvent( CreateUpdateScreenEvents.QuestionDeleted )
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.DeleteOutline,
+                                contentDescription = "delete",
+                                tint = Color.White
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = "Deleting...",
+                            fontFamily = Font(R.font.lexend_bold).toFontFamily(),
+                            fontSize = 14.sp,
+                            color = Color.Red,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(end = 6.dp)
+                        )
+                    }
+                }
             }
 
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.onEvent( CreateUpdateScreenEvents.SaveClicked )
+                    if ( !screenState.isDeleting && !screenState.addingQuestionInProgress ) {
+                        viewModel.onEvent( CreateUpdateScreenEvents.SaveClicked )
+                    }
                 },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -112,7 +169,8 @@ fun CreateUpdateScreen(
                 Box(
                     modifier = Modifier
                         .padding(it)
-                        .fillMaxSize(), contentAlignment = Alignment.Center
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
                     ProgressIndicator(text = "...")
                 }
@@ -193,7 +251,7 @@ fun CreateUpdateScreen(
                                 textAlign = TextAlign.Center,
                                 fontFamily = Font(R.font.lexend_bold).toFontFamily(),
                                 fontSize = 15.sp,
-                                color = Color.DarkGray,
+                                color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -210,7 +268,9 @@ fun CreateUpdateScreen(
                                             .clickable {
                                                 if (!screenState.addingQuestionInProgress) {
                                                     viewModel.onEvent(
-                                                        CreateUpdateScreenEvents.SelectedCorrectAnswer(it)
+                                                        CreateUpdateScreenEvents.SelectedCorrectAnswer(
+                                                            it
+                                                        )
                                                     )
                                                 }
                                             }
@@ -229,7 +289,7 @@ fun CreateUpdateScreen(
                                         Icon(
                                             imageVector = Icons.Rounded.DoneAll,
                                             contentDescription = stringResource(R.string.remove_answer),
-                                            tint = MaterialTheme.colorScheme.primary
+                                            tint = if (isSystemInDarkTheme()) Color.White else SeaGreen,
                                         )
                                     }
                                 }
@@ -239,7 +299,7 @@ fun CreateUpdateScreen(
                                     text = "Remove answer choices?",
                                     fontFamily = Font(R.font.lexend_medium).toFontFamily(),
                                     fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen,
                                     modifier = Modifier
                                         .clickable {
                                             viewModel.onEvent(CreateUpdateScreenEvents.DeleteChoicesList)

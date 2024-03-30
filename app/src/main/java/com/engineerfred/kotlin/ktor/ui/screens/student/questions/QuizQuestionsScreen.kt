@@ -62,8 +62,8 @@ import com.engineerfred.kotlin.ktor.ui.model.Subject
 import com.engineerfred.kotlin.ktor.ui.screens.student.questions.components.ChoiceCard
 import com.engineerfred.kotlin.ktor.ui.screens.student.questions.components.LevelSelectionContainer
 import com.engineerfred.kotlin.ktor.ui.screens.student.questions.components.QuestionCard
-import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
 import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.QuizQuestionsViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 
@@ -118,7 +118,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(7.dp))
                         CustomButtonComponent(
                             text = "Repeat Level",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
                                     sharedViewModel.answeredQuestionsState.removeAll(sharedViewModel.answeredQuestionsState)
@@ -130,7 +129,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(10.dp))
                         CustomButtonComponent(
                             text = "Continue to the next Level",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
                                     sharedViewModel.answeredQuestionsState.removeAll(sharedViewModel.answeredQuestionsState)
@@ -147,7 +145,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(7.dp))
                         CustomButtonComponent(
                             text = "Try again",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
                                     sharedViewModel.answeredQuestionsState.removeAll(sharedViewModel.answeredQuestionsState)
@@ -201,7 +198,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(7.dp))
                         CustomButtonComponent(
                             text = "Repeat Level",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
                                     sharedViewModel.answeredQuestionsState.removeAll(sharedViewModel.answeredQuestionsState)
@@ -213,7 +209,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(10.dp))
                         CustomButtonComponent(
                             text = "Continue to the next Level",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             enabled = { uiState.enableContinueToNextLevelButton },
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
@@ -230,7 +225,6 @@ fun QuizQuestionsScreen(
                         Spacer(modifier = Modifier.size(7.dp))
                         CustomButtonComponent(
                             text = "Try again",
-                            backGroundColor = if ( isSystemInDarkTheme() ) DarkSlateGrey else MaterialTheme.colorScheme.primary,
                             onClick = {
                                 if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
                                     sharedViewModel.answeredQuestionsState.removeAll(sharedViewModel.answeredQuestionsState)
@@ -246,7 +240,8 @@ fun QuizQuestionsScreen(
                     if ( uiState.upgradingLevel ) {
                         LinearProgressIndicator(  modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 200.dp)
+                            .padding(horizontal = 200.dp),
+                            color = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                     }
@@ -424,7 +419,8 @@ fun QuizQuestionsScreen(
                                             unfocusedContainerColor = Color.Transparent,
                                             focusedContainerColor = Color.Transparent,
                                             focusedIndicatorColor = if ( !isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else DarkSlateGrey,
-                                            unfocusedIndicatorColor = if ( !isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else DarkSlateGrey
+                                            unfocusedIndicatorColor = if ( !isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else DarkSlateGrey,
+                                            cursorColor = if ( isSystemInDarkTheme() ) Color.White else SeaGreen
                                         ), keyboardOptions = KeyboardOptions( imeAction = ImeAction.Done )
                                     )
                                 }
@@ -434,7 +430,6 @@ fun QuizQuestionsScreen(
                             ) {
                                 CustomButtonComponent(
                                     text = "Next",
-                                    backGroundColor = if (!isSystemInDarkTheme() ) MaterialTheme.colorScheme.primary else Charcoal,
                                     onClick = {
                                         selectedIndex = -1
                                         sharedViewModel.addAnsweredQuestion(

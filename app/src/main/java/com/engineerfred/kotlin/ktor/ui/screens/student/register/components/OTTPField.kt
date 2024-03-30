@@ -2,6 +2,7 @@ package com.engineerfred.kotlin.ktor.ui.screens.student.register.components
 
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun OtpTextField(
@@ -74,7 +76,7 @@ private fun CharView(
             .size(50.dp)
             .border(
                 1.dp, when {
-                    isFocused -> MaterialTheme.colorScheme.primary
+                    isFocused -> if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
                     else -> Color.LightGray
                 }, RoundedCornerShape(8.dp)
             )
@@ -84,7 +86,7 @@ private fun CharView(
         color = if (isFocused) {
             Color.LightGray
         } else {
-            MaterialTheme.colorScheme.primary
+            if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
         },
         textAlign = TextAlign.Center
     )

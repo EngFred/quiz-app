@@ -86,7 +86,7 @@ fun QuestionCard(
                     .size(80.dp)
                     .clip(CircleShape)
                     .border(3.dp, SeaGreen, CircleShape)
-                    .background(SeaGreen.copy(alpha = .5f)),
+                    .background(if (isSystemInDarkTheme()) DarkSlateGrey.copy(alpha = .5f) else SeaGreen.copy(alpha = .5f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

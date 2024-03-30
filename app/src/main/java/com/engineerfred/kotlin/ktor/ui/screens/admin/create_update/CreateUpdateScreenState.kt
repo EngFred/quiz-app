@@ -24,12 +24,17 @@ data class CreateUpdateScreenState(
     val localErrorMessage: String = "",
     val remoteErrorMessage: String = "",
     val successMessage: String = "",
-    val addingQuestionInProgress: Boolean = false
+    val addingQuestionInProgress: Boolean = false,
+
+    val deleteError: String? = null,
+    val isDeleting: Boolean = false,
+    val deleteSuccessful: Boolean = false,
+    val currentQuestion: Question? = null
 ) {
     var question = Question(
         id = questionId ?: "",
         question = questionText.replaceFirstChar { it.titlecase() },
-        answer = correctAnswer.lowercase(),
+        answer = correctAnswer.lowercase().trim(),
         answerType = answerType,
         answerChoices = if ( listOfAnswerChoicesWithLetters.isEmpty() ) null else listOfAnswerChoicesWithLetters,
         subject = subject?.replaceFirstChar { it.titlecase() } ?: "",

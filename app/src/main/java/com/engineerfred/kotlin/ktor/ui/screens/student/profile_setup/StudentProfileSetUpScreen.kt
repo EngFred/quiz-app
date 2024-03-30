@@ -1,12 +1,14 @@
 package com.engineerfred.kotlin.ktor.ui.screens.student.profile_setup
 
 import android.Manifest
+import android.app.Activity
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,18 +33,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomButtonComponent
 import com.engineerfred.kotlin.ktor.common.ErrorIndicator
 import com.engineerfred.kotlin.ktor.ui.screens.student.profile_setup.components.StudentProfileSetupContainer
+import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.StudentProfileSetupScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -60,6 +69,18 @@ fun StudentProfileSetupScreen(
     val fm = LocalFocusManager.current
     val context =  LocalContext.current
     val screenState = viewModel.uiState
+
+    val colorScheme = MaterialTheme.colorScheme
+    val view = LocalView.current
+    val isDarkTheme = isSystemInDarkTheme()
+
+    LaunchedEffect(key1 = Unit) {
+        val window = (view.context as Activity).window
+        window.statusBarColor = colorScheme.surface.toArgb()
+        window.navigationBarColor = colorScheme.surface.toArgb()
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
+        WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !isDarkTheme
+    }
 
     var isDialogVisible by rememberSaveable {
         mutableStateOf(false)
@@ -160,7 +181,6 @@ fun StudentProfileSetupScreen(
             modifier = Modifier.padding(top = 60.dp, start = 60.dp, end = 60.dp),
             btnModifier = Modifier.fillMaxWidth(),
             text = "Register",
-            backGroundColor =  MaterialTheme.colorScheme.primary,
             isLoading = { screenState.registrationInProgress },
             enabled = { screenState.nameValue.isNotEmpty() && screenState.nameValueError.isEmpty() },
             cornerSize = 10.dp,
@@ -183,8 +203,8 @@ fun StudentProfileSetupScreen(
                         isDialogVisible = false
                         galleryPermissionState.launchPermissionRequest()
                     }, colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.LightGray,
-                        contentColor = Color.Black
+                        containerColor = if (isSystemInDarkTheme()) Charcoal else Color.LightGray,
+                        contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black
                     )) {
                         Text(text = "Grant Permission")
                     }
@@ -195,7 +215,7 @@ fun StudentProfileSetupScreen(
                 text = {
                     Text(text = textToShow)
                 },
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen,
                 titleContentColor = Color.White,
                 textContentColor = Color.White
             )

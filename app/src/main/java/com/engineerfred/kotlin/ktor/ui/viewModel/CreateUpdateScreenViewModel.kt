@@ -7,7 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.engineerfred.kotlin.ktor.domain.model.Question
 import com.engineerfred.kotlin.ktor.domain.usecase.questions.AddQuestionUseCase
+import com.engineerfred.kotlin.ktor.domain.usecase.questions.DeleteQuestionUseCase
 import com.engineerfred.kotlin.ktor.domain.usecase.questions.GetQuestionByIdUseCase
 import com.engineerfred.kotlin.ktor.ui.model.AnswerType
 import com.engineerfred.kotlin.ktor.ui.screens.admin.create_update.CreateUpdateScreenEvents
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class CreateUpdateScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val addQuestionUseCase: AddQuestionUseCase,
-    private val getQuestionByIdUseCase: GetQuestionByIdUseCase
+    private val getQuestionByIdUseCase: GetQuestionByIdUseCase,
+    private val deleteQuestionUseCase: DeleteQuestionUseCase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(CreateUpdateScreenState())
@@ -78,7 +81,8 @@ class CreateUpdateScreenViewModel @Inject constructor(
                             listOfAnswerChoicesWithLetters = if ( response.data.answerChoices != null ) response.data.answerChoices.toMutableList() else mutableListOf(),
                             correctAnswer = response.data.answer,
                             level = response.data.level,
-                            levelButtonText = response.data.level
+                            levelButtonText = response.data.level,
+                            currentQuestion = response.data
                         )
                         Log.v(TAG, "The question to update ${uiState.question}")
                     }
@@ -90,6 +94,7 @@ class CreateUpdateScreenViewModel @Inject constructor(
     fun onEvent( event: CreateUpdateScreenEvents ) {
         if ( uiState.localErrorMessage.isNotEmpty() ) uiState = uiState.copy( localErrorMessage = "" )
         if ( uiState.successMessage.isNotEmpty() ) uiState = uiState.copy( successMessage = "" )
+        if ( uiState.deleteError != null ) uiState = uiState.copy( deleteError = null )
         when( event ) {
             is CreateUpdateScreenEvents.AddAnswerChoiceClicked -> {
                 when {
@@ -187,7 +192,6 @@ class CreateUpdateScreenViewModel @Inject constructor(
                     correctAnswer = event.correctAnswer
                 )
             }
-
             is CreateUpdateScreenEvents.DeleteChoicesList -> {
                 uiState = uiState.copy(
                     listOfAnswerChoicesWithLetters = ArrayList(),
@@ -196,11 +200,15 @@ class CreateUpdateScreenViewModel @Inject constructor(
                     answerType = if ( uiState.answerChoice == AnswerType.Long.name ) AnswerType.Short.name else AnswerType.Short.name
                 )
             }
-
             CreateUpdateScreenEvents.SetAnotherQuestionButtonClicked -> {
                 uiState = uiState.copy(
                     successMessage = ""
                 )
+            }
+            CreateUpdateScreenEvents.QuestionDeleted -> {
+                uiState.currentQuestion?.let {
+                    deleteQuestion( it )
+                }
             }
         }
     }
@@ -248,6 +256,28 @@ class CreateUpdateScreenViewModel @Inject constructor(
             successMessage = "Question has been set successfully!",
             addingQuestionInProgress = false
         )
+    }
+
+    private fun deleteQuestion( question: Question ) = viewModelScope.launch(Dispatchers.IO) {
+        uiState = uiState.copy(
+            isDeleting = true
+        )
+        val task = deleteQuestionUseCase.invoke(question)
+        when(task){
+            is Response.Error -> {
+                uiState = uiState.copy(
+                    isDeleting = false,
+                    deleteError = task.errorMessage
+                )
+            }
+            is Response.Success -> {
+                uiState = uiState.copy(
+                    isDeleting = false,
+                    deleteSuccessful = true
+                )
+            }
+            Response.Undefined -> Unit
+        }
     }
 
 }

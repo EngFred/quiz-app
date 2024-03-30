@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,8 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.model.Level
-import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
+import com.engineerfred.kotlin.ktor.ui.theme.FireEngineRed
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 
 @Composable
@@ -36,13 +36,13 @@ fun LevelIndicator(
     dotSize: Dp = 8.dp,
     fontWeight: FontWeight = FontWeight.Normal,
     fontSize: TextUnit = 13.sp,
-    textColor: Color = Color.DarkGray,
+    textColor: Color =  if (!isSystemInDarkTheme()) Color.DarkGray else Color.LightGray,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start
 ) {
     val color: Color = when( level ) {
         Level.Beginner.name -> Color.Gray
-        Level.Intermediate.name -> if ( !isSystemInDarkTheme() )  MaterialTheme.colorScheme.primary else DarkSlateGrey
-        Level.Advanced.name -> MaterialTheme.colorScheme.error
+        Level.Intermediate.name -> SeaGreen
+        Level.Advanced.name -> FireEngineRed
         else -> Color.Gray
     }
     Row(

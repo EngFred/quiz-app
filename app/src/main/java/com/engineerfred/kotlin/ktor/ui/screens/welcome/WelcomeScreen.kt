@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,10 +46,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.ProgressIndicator
 import com.engineerfred.kotlin.ktor.ui.model.User
+import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.WelcomeScreenViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(
     welcomeScreenViewModel: WelcomeScreenViewModel,
@@ -112,7 +113,7 @@ fun WelcomeScreen(
                         fontFamily = Font(R.font.lexend_bold).toFontFamily(),
                         fontSize = 22.sp
                     )
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(20.dp))
                     Text(text = "Dear User,\nThank you for choosing ${stringResource(id = R.string.app_name)} for your quiz needs. " +
                             "Before you proceed, here are some important points to note:", fontSize = 14.sp, lineHeight = 17.sp
                     )
@@ -131,18 +132,21 @@ fun WelcomeScreen(
                         append("participate in quizzes by answering questions set by admins.you will be required to login using your registered phone number.")
                     }, fontSize = 14.sp, lineHeight = 17.sp)
 
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(20.dp))
                     Text(text = "Choose your role below to get started:", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.size(10.dp))
                     ElevatedCard(
                         modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isSystemInDarkTheme()) Charcoal else SeaGreen.copy(alpha = .7f),
+                        ),
                         onClick = {
                             welcomeScreenViewModel.onEvent( WelcomeScreenEvents.CardClicked(User.Student.name.lowercase()) )
                             navigateToStudentRegister.invoke()
                         }
                     ) {
                         Row(
-                            Modifier.padding(start = 10.dp),
+                            Modifier.padding(start = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(text = "I'm a student", modifier = Modifier
@@ -153,7 +157,7 @@ fun WelcomeScreen(
                                 modifier = Modifier
                                     .width(150.dp)
                                     .height(70.dp)
-                                    .clip(RoundedCornerShape(10.dp)),
+                                    .clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
                             )
@@ -163,13 +167,16 @@ fun WelcomeScreen(
                     ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isSystemInDarkTheme()) Charcoal else SeaGreen.copy(alpha = .7f),
+                        ),
                         onClick = {
                             welcomeScreenViewModel.onEvent( WelcomeScreenEvents.CardClicked(User.Admin.name.lowercase()) )
                             navigateToAdminLogin.invoke()
                         }
                     ) {
                         Row(
-                            Modifier.padding(start = 10.dp),
+                            Modifier.padding(start = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(text = "I'm an admin", modifier = Modifier
@@ -180,13 +187,15 @@ fun WelcomeScreen(
                                 modifier = Modifier
                                     .width(150.dp)
                                     .height(70.dp)
-                                    .clip(RoundedCornerShape(10.dp)),
+                                    .clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.weight(1f).padding(10.dp))
+                    Spacer(modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp))
                     Text(
                         text = "If you encounter any issues or have feedback, feel free to reach out to us.",
                         fontWeight = FontWeight.Bold,

@@ -1,6 +1,7 @@
 package com.engineerfred.kotlin.ktor.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,6 @@ import androidx.compose.material.icons.rounded.CloudDone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
+import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun SuccessIndicator(
@@ -43,7 +45,7 @@ fun SuccessIndicator(
         Icon(
             imageVector = Icons.Rounded.CloudDone,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = if (isSystemInDarkTheme()) Color.White else SeaGreen,
             modifier = Modifier.size(54.dp)
         )
         Spacer(modifier = Modifier.size(7.dp))
@@ -51,7 +53,7 @@ fun SuccessIndicator(
             text = text,
             fontFamily = Font(R.font.lexend_bold).toFontFamily(),
             fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color =  if (isSystemInDarkTheme()) Color.White else SeaGreen,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
@@ -63,9 +65,9 @@ fun SuccessIndicator(
             Button(
                 onClick = { onSetAnotherQuestionClicked.invoke() },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
+                    contentColor =  if (isSystemInDarkTheme()) Color.White else SeaGreen,
                     containerColor = Color.Transparent,
-                ), shape = RoundedCornerShape(6.dp), border = BorderStroke( 2.dp, MaterialTheme.colorScheme.primary )
+                ), shape = RoundedCornerShape(6.dp), border = BorderStroke( 2.dp,  if (isSystemInDarkTheme()) Color.White else SeaGreen )
             ) {
                 Text(
                     text = "Set another question",
@@ -76,7 +78,7 @@ fun SuccessIndicator(
                 onClick = { onDoneClicked.invoke() },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor =  if (isSystemInDarkTheme()) Charcoal else SeaGreen
                 ), shape = RoundedCornerShape(6.dp)
             ) {
                 Text(

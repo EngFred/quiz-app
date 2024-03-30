@@ -1,8 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.add_admin
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +35,7 @@ import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomButtonComponent
 import com.engineerfred.kotlin.ktor.ui.screens.admin.add_admin.components.RegisterContainer
 import com.engineerfred.kotlin.ktor.ui.viewModel.AdminRegisterScreenViewModel
+import com.engineerfred.kotlin.ktor.util.restartApp
 
 @Composable
 fun AdminRegisterScreen(
@@ -115,7 +114,6 @@ fun AdminRegisterScreen(
             modifier = Modifier.padding(top = 60.dp, start = 60.dp, end = 60.dp),
             btnModifier = Modifier.fillMaxWidth(),
             text = "Register",
-            backGroundColor = MaterialTheme.colorScheme.primary,
             isLoading = { uiState.registrationInProgress },
             enabled = { viewModel::validateForm.invoke() },
             cornerSize = 10.dp,
@@ -137,13 +135,4 @@ fun AdminRegisterScreen(
             )
         }
     }
-}
-
-private fun restartApp( context: Context ) {
-    val pm = context.packageManager
-    val intent = pm.getLaunchIntentForPackage(context.packageName)
-    val componentName = intent!!.component
-    val restartIntent = Intent.makeRestartActivityTask(componentName)
-    context.startActivity(restartIntent)
-    Runtime.getRuntime().exit(0)
 }

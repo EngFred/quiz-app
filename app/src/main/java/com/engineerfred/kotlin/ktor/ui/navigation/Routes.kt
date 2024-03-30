@@ -10,7 +10,6 @@ sealed class Routes( val destination: String ) {
     data object StudentsScreen : Routes("student_screen")
     data object QuizQuestionsScreen : Routes("quiz_questions_screen")
     data object QuizResultsScreen : Routes("quiz_results_screen")
-    data object AdminsFeedbackScreen : Routes("admins_feedback_screen")
     data object AdminsScreen : Routes("admins_screen")
     data object StudentDashBoardScreen : Routes("student_dash_board_screen")
     data object AdminDashBoardScreen : Routes("admin_dash_board_screen")

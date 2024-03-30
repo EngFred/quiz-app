@@ -6,6 +6,7 @@ sealed class CreateUpdateScreenEvents {
     data class AnswerChoiceTextChanged(val answerChoiceText: String ) : CreateUpdateScreenEvents()
     data object AddAnswerChoiceClicked: CreateUpdateScreenEvents()
     data object DeleteChoicesList: CreateUpdateScreenEvents()
+    data object QuestionDeleted: CreateUpdateScreenEvents()
     data class CorrectAnswerTextChanged(val answerText: String ) : CreateUpdateScreenEvents()
     data class SelectedCorrectAnswer( val correctAnswer: String ) : CreateUpdateScreenEvents()
     data object LevelButtonClicked: CreateUpdateScreenEvents()

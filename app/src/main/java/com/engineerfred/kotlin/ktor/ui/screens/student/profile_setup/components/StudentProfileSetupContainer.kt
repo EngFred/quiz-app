@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +31,6 @@ import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.CustomTextEntry
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentProfileSetupContainer(
     modifier: Modifier = Modifier,

@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
+import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
@@ -31,13 +31,14 @@ fun CustomButtonComponent(
     btnModifier: Modifier = Modifier,
     text: String,
     textSize: TextUnit = 16.sp,
-    backGroundColor: Color,
     contentColor: Color = Color.White,
     enabled: () -> Boolean = { true },
     onClick: () -> Unit,
     isLoading: () -> Boolean = { false },
     cornerSize: Dp = 20.dp
 ) {
+
+    val backGroundColor =  if (isSystemInDarkTheme()) Charcoal else SeaGreen
 
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -64,7 +65,7 @@ fun CustomButtonComponent(
             }
         } else {
             CircularProgressIndicator(
-                color = if (isSystemInDarkTheme()) Color.White else SeaGreen,
+                color = if(!isSystemInDarkTheme()) SeaGreen else Color.White,
                 modifier = Modifier.size(48.dp)
             )
         }
@@ -77,7 +78,6 @@ fun CustomButtonComponentPreview() {
     QuizAppTheme {
         CustomButtonComponent(
             text = "Login",
-            backGroundColor = MaterialTheme.colorScheme.primary,
             onClick = { /*TODO*/ },
             enabled = { true }
         )

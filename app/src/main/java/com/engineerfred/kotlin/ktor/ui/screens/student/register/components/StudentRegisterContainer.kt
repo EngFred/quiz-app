@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -57,7 +56,6 @@ fun StudentRegisterContainer(
 
             CustomButtonComponent(
                 text = "Verify",
-                backGroundColor = MaterialTheme.colorScheme.primary,
                 onClick = onVerifyButtonClicked,
                 enabled = { enableVerifyButton },
                 cornerSize = 5.dp,
@@ -69,7 +67,7 @@ fun StudentRegisterContainer(
 
             Spacer(modifier = Modifier.size(50.dp))
 
-            Divider()
+            HorizontalDivider()
 
             Spacer(modifier = Modifier.size(30.dp))
 
@@ -84,7 +82,6 @@ fun StudentRegisterContainer(
 
             CustomButtonComponent(
                 text = "Done",
-                backGroundColor = MaterialTheme.colorScheme.primary,
                 onClick = onDoneButtonClicked,
                 enabled = { enableDoneButton },
                 cornerSize = 5.dp,

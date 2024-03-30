@@ -1,8 +1,10 @@
 package com.engineerfred.kotlin.ktor.ui.screens.student.register
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.ErrorIndicator
 import com.engineerfred.kotlin.ktor.ui.screens.student.register.components.StudentRegisterContainer
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 import com.engineerfred.kotlin.ktor.ui.viewModel.StudentRegisterScreenViewModel
 
@@ -46,12 +50,19 @@ fun StudentRegisterScreen(
     val screenState = viewModel.uiState
     val activity = LocalContext.current as Activity
     val fm = LocalFocusManager.current
+    val context = LocalContext.current
 
-    when {
-        screenState.isAuthenticationSuccessfulNewStudent -> onNewStudentAuthenticationSuccess.invoke()
-        screenState.oldStudent != null -> {
+    LaunchedEffect(key1 = screenState.isAuthenticationSuccessfulNewStudent) {
+        if ( screenState.isAuthenticationSuccessfulNewStudent && screenState.oldStudent == null ) {
+            onNewStudentAuthenticationSuccess.invoke()
+        }
+    }
+
+    LaunchedEffect(key1 = screenState.oldStudent) {
+        if ( !screenState.isAuthenticationSuccessfulNewStudent && screenState.oldStudent != null ) {
             sharedViewModel.addStudent( screenState.oldStudent )
             onOldStudentAuthenticationSuccess.invoke()
+            Toast.makeText(context, "Welcome back ${screenState.oldStudent.name}!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -109,7 +120,7 @@ fun StudentRegisterScreen(
             text = "Not a student?",
             modifier = Modifier
                 .clickable {
-                    if ( !screenState.changingUser && !screenState.verificationInProgress && !screenState.finishingInProgress ) {
+                    if (!screenState.changingUser && !screenState.verificationInProgress && !screenState.finishingInProgress) {
                         viewModel.onEvent(StudentRegisterScreenEvents.NotStudentClicked)
                     }
                 }
@@ -119,7 +130,7 @@ fun StudentRegisterScreen(
             textDecoration = TextDecoration.Underline,
             fontSize = 14.sp,
             fontFamily = Font(R.font.lexend_bold).toFontFamily(),
-            color = MaterialTheme.colorScheme.primary
+            color = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
         )
 
         if ( screenState.notAStudentClickSuccess ) onNotStudentClicked.invoke()

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,54 +50,71 @@ fun ResultsScreen(
     }
 
     if ( sharedViewModel.answeredQuestionsState.isNotEmpty() ) {
-        LazyColumn(
+        val passedQuestionsSize = sharedViewModel.answeredQuestionsState.filter { it.isPassed }.size
+        
+        val comment = when {
+            passedQuestionsSize == 5 -> "Fair"
+            passedQuestionsSize == 6 -> "Good"
+            passedQuestionsSize == 7 -> "Very Good"
+            passedQuestionsSize == 8 -> "Excellent"
+            passedQuestionsSize >= 9 -> "Genius"
+            else -> "Work hard"
+        }
+            Column(
             modifier = Modifier.padding(horizontal = 10.dp)
         ) {
-            items(sharedViewModel.answeredQuestionsState) {
-                val borderColor = if (it.isPassed) SeaGreen else MaterialTheme.colorScheme.error
-                val icon = if ( it.isPassed ) Icons.Rounded.Done else Icons.Rounded.Close
-                val iconColor = if ( it.isPassed ) SeaGreen else MaterialTheme.colorScheme.error
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .border(2.dp, borderColor, RoundedCornerShape(10.dp))
-                        .padding(10.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top
+            Text(text = buildAnnotatedString { 
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold)){ append("Comment: ") }
+                append(comment)
+            }, textAlign = TextAlign.Center, maxLines = 1 , modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.size(8.dp))    
+            LazyColumn{
+                items(sharedViewModel.answeredQuestionsState) {
+                    val borderColor = if (it.isPassed) SeaGreen else MaterialTheme.colorScheme.error
+                    val icon = if ( it.isPassed ) Icons.Rounded.Done else Icons.Rounded.Close
+                    val iconColor = if ( it.isPassed ) SeaGreen else MaterialTheme.colorScheme.error
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .border(2.dp, borderColor, RoundedCornerShape(10.dp))
+                            .padding(10.dp)
                     ) {
-                        Text(
-                            text = it.answeredQuestion, modifier = Modifier
-                                .weight(1f)
-                                .padding(5.dp)
-                        )
-                        Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(40.dp), tint = iconColor )
-                    }
-                    if ( !it.isPassed ){
-                        Text(text = buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)){
-                                append("Your answer: ")
-                            }
-                            append(it.givenAnswer.replaceFirstChar { it.titlecase() })
-                        })
-                        Text(text = buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
-                                append("Correct Answer: ")
-                            }
-                            withStyle(SpanStyle(color = SeaGreen)){
+                        Row(
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Text(
+                                text = it.answeredQuestion, modifier = Modifier
+                                    .weight(1f)
+                                    .padding(5.dp)
+                            )
+                            Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(40.dp), tint = iconColor )
+                        }
+                        if ( !it.isPassed ){
+                            Text(text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)){
+                                    append("Your answer: ")
+                                }
+                                append(it.givenAnswer.replaceFirstChar { it.titlecase() })
+                            })
+                            Text(text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
+                                    append("Correct Answer: ")
+                                }
+                                withStyle(SpanStyle(color = SeaGreen)){
+                                    append(it.correctAnswer.replaceFirstChar { it.titlecase() })
+                                }
+                            })
+                        } else {
+                            Text(text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
+                                    append("Answer: ")
+                                }
                                 append(it.correctAnswer.replaceFirstChar { it.titlecase() })
-                            }
-                        })
-                    } else {
-                        Text(text = buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
-                                append("Answer: ")
-                            }
-                            append(it.correctAnswer.replaceFirstChar { it.titlecase() })
-                        })
+                            })
+                        }
                     }
+                    Spacer(modifier = Modifier.size(10.dp))
                 }
-                Spacer(modifier = Modifier.size(10.dp))
             }
         }
     } else

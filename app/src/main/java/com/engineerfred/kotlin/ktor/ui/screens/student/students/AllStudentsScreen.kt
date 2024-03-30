@@ -1,5 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.screens.student.students
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -12,18 +13,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
@@ -43,6 +50,17 @@ fun AllStudentsScreen(
     allStudentsViewModel: AllStudentsViewModel = hiltViewModel()
 ) {
     val uiState = allStudentsViewModel.uiState
+
+    val colorScheme = MaterialTheme.colorScheme
+    val view = LocalView.current
+
+    LaunchedEffect(key1 = Unit) {
+        val window = (view.context as Activity).window
+        window.statusBarColor = colorScheme.primary.toArgb()
+        window.navigationBarColor = colorScheme.primary.toArgb()
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+        WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = false
+    }
 
     when{
         uiState.isLoading -> {
@@ -95,17 +113,21 @@ fun AllStudentsScreen(
                                     .padding(10.dp),
                                 verticalAlignment = Alignment.Top
                             ) {
-                                AsyncImage(
-                                    model = student.profileImage,
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(75.dp)
-                                        .clip(CircleShape)
-                                        .background(Color.LightGray),
-                                    contentScale = ContentScale.Crop
-                                )
+                                Box(modifier = Modifier.wrapContentSize().padding(top = 7.dp)) {
+                                    AsyncImage(
+                                        model = student.profileImage,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(75.dp)
+                                            .clip(CircleShape)
+                                            .background(Color.LightGray),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
                                 Column(
-                                    modifier = Modifier.weight(1f).padding(start = 13.dp)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 13.dp)
                                 ) {
                                     Text(
                                         text = student.name,

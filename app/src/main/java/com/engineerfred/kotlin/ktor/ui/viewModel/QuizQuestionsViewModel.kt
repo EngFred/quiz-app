@@ -193,6 +193,43 @@ class QuizQuestionsViewModel @Inject constructor(
                     Level.Intermediate.name -> Level.Advanced.name
                     else -> Level.Intermediate.name
                 }
+                if (subject == Subject.English.name) {
+                    when (uiState.studentLevel) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 140
+                            )
+                        }
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 100
+                            )
+                        }
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 45
+                            )
+                        }
+                    }
+                } else {
+                    when (uiState.studentLevel) {
+                        Level.Beginner.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 180
+                            )
+                        }
+                        Level.Intermediate.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 120
+                            )
+                        }
+                        Level.Advanced.name -> {
+                            uiState = uiState.copy(
+                                timeLeft = 80
+                            )
+                        }
+                    }
+                }
                 uiState = uiState.copy(
                     isLoading = true,
                     levelEnded = false,
@@ -386,11 +423,6 @@ class QuizQuestionsViewModel @Inject constructor(
         }
     }
     private fun initialiseUiState( subject: String, level: String ) {
-        if ( level == Level.Advanced.name ) {
-            uiState = uiState.copy(
-                quizCompleted = true
-            )
-        }
         viewModelScope.launch(Dispatchers.IO) {
             when (subject) {
                 Subject.English.name -> {

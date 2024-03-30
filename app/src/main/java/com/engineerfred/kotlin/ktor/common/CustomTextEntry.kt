@@ -2,6 +2,7 @@ package com.engineerfred.kotlin.ktor.common
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +42,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun CustomTextEntry(
@@ -50,10 +53,10 @@ fun CustomTextEntry(
     hint: String,
     textValue: String,
     keyboardType: KeyboardType = KeyboardType.Text,
-    textColor: Color = Color.Black,
-    cursorColor: Color = Color.Transparent,
-    backGroundColor: Color = Color.White,
-    iconsColor: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = if(!isSystemInDarkTheme()) Color.Black else Color.White,
+    cursorColor: Color = if(isSystemInDarkTheme()) Color.White else SeaGreen,
+    backGroundColor: Color = if(!isSystemInDarkTheme()) Color.White else DarkSlateGrey,
+    iconsColor: Color = if(isSystemInDarkTheme()) Color.White else SeaGreen,
     cornerSize: Dp = 20.dp,
     height: Dp = 60.dp,
     shadow: Dp = 7.dp,
@@ -98,7 +101,7 @@ fun CustomTextEntry(
                     focusedIndicatorColor = cursorColor,
                     unfocusedIndicatorColor = cursorColor,
                     focusedTextColor = textColor,
-                    unfocusedTextColor = textColor
+                    unfocusedTextColor = textColor,
                 ),
                 textStyle = TextStyle.Default.copy(
                     fontSize = 14.sp,
@@ -133,7 +136,7 @@ fun CustomTextEntry(
                     Text(
                         text = hint,
                         fontFamily = Font(R.font.lexend_medium).toFontFamily(),
-                        color = Color.Gray,
+                        color = if(!isSystemInDarkTheme()) Color.Gray else Color.LightGray,
                         fontSize = 14.sp
                     )
                 },
@@ -187,7 +190,7 @@ fun CustomTextEntry(
                     Text(
                         text = hint,
                         fontFamily = Font(R.font.lexend_medium).toFontFamily(),
-                        color = Color.Gray,
+                        color = if(!isSystemInDarkTheme()) Color.Gray else Color.LightGray,
                         fontSize = 14.sp
                     )
                 },

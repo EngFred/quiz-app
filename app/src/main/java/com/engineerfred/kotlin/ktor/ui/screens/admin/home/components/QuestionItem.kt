@@ -1,6 +1,8 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.home.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +28,7 @@ import com.engineerfred.kotlin.ktor.common.LevelIndicator
 import com.engineerfred.kotlin.ktor.domain.model.Question
 import com.engineerfred.kotlin.ktor.ui.model.AnswerType
 import com.engineerfred.kotlin.ktor.ui.model.Level
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
 
 @Composable
@@ -32,13 +36,17 @@ fun QuestionItem(
     question: Question,
     onQuestionClick: (String) -> Unit
 ) {
+
+    val bgColor = if (isSystemInDarkTheme()) DarkSlateGrey else Color.White
+
     Column(
         modifier = Modifier
             .clickable {
                 onQuestionClick.invoke(question.id)
             }
             .fillMaxWidth()
-            .padding(start = 15.dp, end=15.dp, top=15.dp, bottom = 8.dp),
+            .background(bgColor)
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 8.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -46,7 +54,6 @@ fun QuestionItem(
             fontSize = 16.sp,
             maxLines = 4,
             overflow = TextOverflow.Ellipsis,
-            color = Color.Black,
             fontFamily = Font(R.font.lexend_regular).toFontFamily()
         )
         Spacer(modifier = Modifier.size(5.dp))
@@ -60,14 +67,14 @@ fun QuestionItem(
                 modifier = Modifier.padding(start = 5.dp),
                 text = if(question.setBy != "null") question.setBy else "...",
                 fontSize = 12.sp,
-                color = Color.Gray,
+                color = if (!isSystemInDarkTheme()) Color.Gray else Color.LightGray,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = Font(R.font.lexend_regular).toFontFamily()
             )
         }
     }
-    Divider()
+    HorizontalDivider( color = if ( isSystemInDarkTheme() ) MaterialTheme.colorScheme.surface else Color.DarkGray )
 }
 
 @Preview( showBackground = true )

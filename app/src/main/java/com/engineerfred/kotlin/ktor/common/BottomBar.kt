@@ -44,8 +44,8 @@ fun BottomBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.White,
                     selectedTextColor = Color.White,
-                    unselectedIconColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.DarkGray,
-                    unselectedTextColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.DarkGray,
+                    unselectedIconColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.LightGray,
+                    unselectedTextColor = if ( !isSystemInDarkTheme() ) Color.Black else Color.LightGray,
                     indicatorColor = MaterialTheme.colorScheme.primary
                 ),
                 selected = currentDestination?.route == it.destinationScreen,

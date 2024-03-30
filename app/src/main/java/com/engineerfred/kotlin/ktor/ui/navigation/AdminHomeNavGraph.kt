@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.engineerfred.kotlin.ktor.ui.screens.admin.admins.AdminsScreen
 import com.engineerfred.kotlin.ktor.ui.screens.admin.dashbord.AdminDashboardScreen
+import com.engineerfred.kotlin.ktor.ui.screens.student.students.AllStudentsScreen
 import com.engineerfred.kotlin.ktor.ui.viewModel.SharedViewModel
 
 @Composable
@@ -39,9 +40,15 @@ fun AdminHomeNavigationGraph(
         }
 
         composable(
-            route = Routes.AdminsFeedbackScreen.destination
+            route = Routes.AdminsScreen.destination
         ) {
             AdminsScreen(modifier)
+        }
+
+        composable(
+            route = Routes.StudentsScreen.destination
+        ) {
+            AllStudentsScreen(modifier)
         }
 
         adminDetailNavGraph( navController )

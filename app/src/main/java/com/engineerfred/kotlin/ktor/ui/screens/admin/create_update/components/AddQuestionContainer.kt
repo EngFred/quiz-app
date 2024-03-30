@@ -1,5 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.create_update.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.ui.model.Level
+import com.engineerfred.kotlin.ktor.ui.theme.Charcoal
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun AddQuestionContainer(
@@ -84,6 +86,8 @@ fun AddQuestionContainer(
             enabled = enabledCorrectAnswerTextField
         )
 
+        Spacer(modifier = Modifier.size(10.dp))
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,7 +104,6 @@ fun AddQuestionContainer(
                         text = "Level:",
                         fontFamily = Font(R.font.lexend_bold).toFontFamily(),
                         fontSize = 15.sp,
-                        color = Color.DarkGray,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -109,7 +112,7 @@ fun AddQuestionContainer(
                         onClick = { onLevelButtonClicked.invoke() },
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.White,
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = if (isSystemInDarkTheme()) Charcoal else SeaGreen,
                         ), shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(text = levelButtonText)
@@ -123,7 +126,6 @@ fun AddQuestionContainer(
                         text = "Subject:",
                         fontFamily = Font(R.font.lexend_bold).toFontFamily(),
                         fontSize = 15.sp,
-                        color = Color.DarkGray,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -132,7 +134,7 @@ fun AddQuestionContainer(
                         onClick = { /*TODO*/ },
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.White,
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor =  if (isSystemInDarkTheme()) Charcoal else SeaGreen
                         ), enabled = false,
                         shape = RoundedCornerShape(6.dp)
                     ) {

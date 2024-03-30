@@ -1,6 +1,7 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import com.engineerfred.kotlin.ktor.R
 import com.engineerfred.kotlin.ktor.common.ErrorIndicator
 import com.engineerfred.kotlin.ktor.common.ProgressIndicator
 import com.engineerfred.kotlin.ktor.ui.screens.admin.home.components.QuestionsList
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.viewModel.QuestionsScreenViewModel
 import java.util.Locale
 
@@ -99,7 +101,7 @@ fun QuestionsScreen(
     ) {
 
         val linearGradient = Brush.linearGradient(
-            colors = listOf(Color.White, MaterialTheme.colorScheme.primary),
+            colors = listOf(if (isSystemInDarkTheme()) DarkSlateGrey else Color.White, MaterialTheme.colorScheme.primary),
             start = Offset.Zero,
             end = Offset.Infinite
         )

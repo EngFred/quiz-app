@@ -120,7 +120,12 @@ fun MainNavigationGraph(
                 onAddAdminClicked = {
                 navController.navigate( Routes.AdminRegisterScreen.destination ) {
                     launchSingleTop = true
-                } }
+                } }, onSignOut = {
+                    navController.navigate( Routes.AdminLoginScreen.destination ) {
+                        popUpTo( Routes.AdminLoginScreen.destination )
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 

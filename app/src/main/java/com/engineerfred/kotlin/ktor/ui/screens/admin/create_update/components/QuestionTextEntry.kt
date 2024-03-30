@@ -1,5 +1,6 @@
 package com.engineerfred.kotlin.ktor.ui.screens.admin.create_update.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -26,7 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.engineerfred.kotlin.ktor.R
+import com.engineerfred.kotlin.ktor.ui.theme.DarkSlateGrey
 import com.engineerfred.kotlin.ktor.ui.theme.QuizAppTheme
+import com.engineerfred.kotlin.ktor.ui.theme.SeaGreen
 
 @Composable
 fun QuestionTextEntry(
@@ -48,7 +50,6 @@ fun QuestionTextEntry(
             text = "${title}:",
             fontFamily = Font(R.font.lexend_bold).toFontFamily(),
             fontSize = 15.sp,
-            color = Color.DarkGray,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -63,7 +64,7 @@ fun QuestionTextEntry(
                 placeholder = { Text(
                     text = placeholder,
                     fontFamily = Font(R.font.lexend_regular).toFontFamily(),
-                    color = Color.Gray,
+                    color = if (!isSystemInDarkTheme()) Color.Gray else Color.LightGray,
                     fontSize = 14.sp,
                     maxLines = 1
                 ) },
@@ -71,9 +72,9 @@ fun QuestionTextEntry(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen,
                     unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor =MaterialTheme.colorScheme.primary
+                    focusedIndicatorColor = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
                 ),
                 textStyle = TextStyle.Default.copy(
                     fontSize = 14.sp,
@@ -89,7 +90,7 @@ fun QuestionTextEntry(
                     Text(
                         text = placeholder,
                         fontFamily = Font(R.font.lexend_regular).toFontFamily(),
-                        color = Color.Gray,
+                        color = if (!isSystemInDarkTheme()) Color.Gray else Color.LightGray,
                         fontSize = 14.sp,
                         maxLines = 1
                     )
@@ -97,9 +98,9 @@ fun QuestionTextEntry(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen,
                     unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                    focusedIndicatorColor = if (isSystemInDarkTheme()) DarkSlateGrey else SeaGreen
                 ),
                 keyboardOptions = KeyboardOptions( imeAction = imeAction ),
                 textStyle = TextStyle.Default.copy(
